@@ -1,7 +1,4 @@
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.IntStream;
@@ -9,9 +6,9 @@ import java.util.stream.IntStream;
 public class LeetCode {
 
     public static void main(String[] args) {
-        int[] nums = {1, 3, 4, 2, 2};
+        int[] nums = {4,5,1,7};
         int target = 3;
-        System.out.println(findPangram("We promptly judged antique ivory buckles for the next prize"));
+        System.out.println(firstMissingPositive(nums));
     }
 
     static void swap(int[] arr, int i, int j) {
@@ -717,5 +714,94 @@ public class LeetCode {
         Matcher matcher = pattern.matcher(s);
         if (s.toLowerCase().matches("[a-zA-Z]")) return "pangram";
         else return "not pangram";
+    }
+
+    /* LeetCode: 645. Set Mismatch */
+    static int[] findErrorNums(int[] nums) {
+        int[] result = new int[]{0, 0};
+        int i = 0;
+//        Loop through the entire array
+        while (i < nums.length) {
+//             Correct position of current element.
+//             Since range is (1,n), we don't have to bother about
+//             Index out of bound exception.
+            int j = nums[i] - 1;
+//            Since range is (1,n) arr[i] should equal i + 1
+//            i.e. arr[0] == 0+1 = 1
+            if (nums[i] != i + 1) {
+//                Since there is only one duplicate, if arr[i] != arr[j]
+//                where j is the correct index of the current element,
+//                swap the current element with the one at the correct index
+                if (nums[i] != nums[j]) {
+                    int temp = nums[i];
+                    nums[i] = nums[j];
+                    nums[j] = temp;
+                }
+//                If the check above doesn't pass, that means current
+//                element is equal to element in correct index.
+//                This is the duplicate element.
+                else {
+                    result[0] = nums[i];
+                    i++;
+                }
+            }
+//            If the check above doesn't pass, that means current element
+//            is already at correct position. Increment i
+            else
+                i++;
+        }
+
+        for (int j = 0; j < nums.length; j++) {
+            if (nums[j] != j + 1) {
+                result[1] = j+1;
+                return result;
+            }
+        }
+        return result;
+    }
+
+    /* LeerCode: 41. First Missing Positive */
+    static  int firstMissingPositive(int[] nums) {
+        /*
+        * This solution is pretty much the same as the missing number
+        * solution. Only difference here is that this problem contains
+        * negative numbers.
+        * Solution: Use cyclic sort to sort the elements in the array.
+        * While sorting, ignore negative numbers and numbers >= the
+        * length of the array. After sorting, the element not in the
+        * correct index is the first missing positive number. Where
+        * the correct index of the element at i is i+1 because we are
+        * dealing with elements in the range (1,n). E.g arr[0] == 1.
+        * At the end, return nums.length + 1 because 0 isn't a positive
+        * number and nums.length might equal 0.
+         */
+        int i = 0;
+        while (i < nums.length) {
+//            Correct index of the current element
+            int j = nums[i] - 1;
+//            Check that the current element is greater than zero, less than
+//            nums.length and is not at the correct index. If this is not the
+//            case, swap the element with the element at the correct index.
+            if (nums[i] > 0 && nums[i] < nums.length && nums[i] != nums[j]) {
+                int temp = nums[i];
+                nums[i] = nums[j];
+                nums[j] = temp;
+            }
+//            When the check above doesn't pass, this means that the current
+//            element might be negative (should be ignored), zero (should be
+//            ignored since zero isn't positive) or is already at the correct
+//            index hence, increment i.
+            else i++;
+        }
+        System.out.println(Arrays.toString(nums));
+//        Loop through the array and find the first missing positive number.
+        for (i = 0; i < nums.length; i++) {
+//            If nums[i] != i + 1, this is the first missing positive
+//            number. e.g. nums[0] == 1
+            if (nums[i] != i + 1)
+                return i + 1;
+        }
+//        At the end, return nums.length + 1
+        return nums.length + 1;
     }
 }
