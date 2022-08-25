@@ -6,9 +6,11 @@ import java.util.stream.IntStream;
 public class LeetCode {
 
     public static void main(String[] args) {
-        int[] nums = {4,5,1,7};
+        int[] nums = {2,5,6,0,0,1,2};
+        String name = new String("Sammie");
+        String name2 = new String("Sammie");
         int target = 3;
-        System.out.println(firstMissingPositive(nums));
+        System.out.println(searchInRotated(nums, target));
     }
 
     static void swap(int[] arr, int i, int j) {
@@ -582,8 +584,7 @@ public class LeetCode {
         for (int i = 0; i <= arr.length; i++) {
             expectedSum += i;
 //            Check to make sure index out of bound exception is avoided.
-            if (i < arr.length)
-                actualSum += arr[i];
+            if (i < arr.length) actualSum += arr[i];
         }
         System.out.println(expectedSum - actualSum);
         return expectedSum - actualSum;
@@ -597,11 +598,9 @@ public class LeetCode {
         while (i < arr.length) {
 //            Increment i if arr[i] is at the correct position i.e arr[i] == i or arr[i]
 //            is the last index (i.e. Ignore the element meant to be at arr[arr.length])
-            if (arr[i] == arr.length || arr[i] == i)
-                i++;
+            if (arr[i] == arr.length || arr[i] == i) i++;
 //            Else swap arr[i] with arr[arr[i]]
-            else
-                swap(arr, i, arr[i]);
+            else swap(arr, i, arr[i]);
         }
         return missingNumber(arr);
     }
@@ -610,8 +609,7 @@ public class LeetCode {
     static int missingNumber(int[] arr) {
         int i = 0;
         while (i < arr.length) {
-            if (arr[i] != i)
-                return i;
+            if (arr[i] != i) return i;
             i++;
         }
         return arr.length;
@@ -627,16 +625,13 @@ public class LeetCode {
             int j = arr[i] - 1;
 //            If current element is not equal to element at correct index,
 //            Swap the elements. This check ignores duplicates.
-            if (arr[i] != arr[j])
-                swap(arr, i, j);
+            if (arr[i] != arr[j]) swap(arr, i, j);
 //            If the check above doesn't pass, that means current element
 //            is already at correct position. Increment i
-            else
-                i++;
+            else i++;
         }
         for (i = 0; i < arr.length; i++) {
-            if (arr[i] != i + 1)
-                disappearedNumbers.add(i + 1);
+            if (arr[i] != i + 1) disappearedNumbers.add(i + 1);
         }
         return disappearedNumbers;
     }
@@ -668,8 +663,7 @@ public class LeetCode {
             }
 //            If the check above doesn't pass, that means current element
 //            is already at correct position. Increment i
-            else
-                i++;
+            else i++;
         }
         return 0;
     }
@@ -697,14 +691,12 @@ public class LeetCode {
             }
 //            If the check above doesn't pass, that means current element
 //            is already at correct position. Increment i
-            else
-                i++;
+            else i++;
         }
 //         Loop through the array, all the elements that are not in the
 //         correct position are the duplicates.
         for (i = 0; i < arr.length; i++) {
-            if (arr[i] != i + 1)
-                duplicates.add(arr[i]);
+            if (arr[i] != i + 1) duplicates.add(arr[i]);
         }
         return duplicates;
     }
@@ -747,13 +739,12 @@ public class LeetCode {
             }
 //            If the check above doesn't pass, that means current element
 //            is already at correct position. Increment i
-            else
-                i++;
+            else i++;
         }
 
         for (int j = 0; j < nums.length; j++) {
             if (nums[j] != j + 1) {
-                result[1] = j+1;
+                result[1] = j + 1;
                 return result;
             }
         }
@@ -761,19 +752,19 @@ public class LeetCode {
     }
 
     /* LeerCode: 41. First Missing Positive */
-    static  int firstMissingPositive(int[] nums) {
+    static int firstMissingPositive(int[] nums) {
         /*
-        * This solution is pretty much the same as the missing number
-        * solution. Only difference here is that this problem contains
-        * negative numbers.
-        * Solution: Use cyclic sort to sort the elements in the array.
-        * While sorting, ignore negative numbers and numbers >= the
-        * length of the array. After sorting, the element not in the
-        * correct index is the first missing positive number. Where
-        * the correct index of the element at i is i+1 because we are
-        * dealing with elements in the range (1,n). E.g arr[0] == 1.
-        * At the end, return nums.length + 1 because 0 isn't a positive
-        * number and nums.length might equal 0.
+         * This solution is pretty much the same as the missing number
+         * solution. Only difference here is that this problem contains
+         * negative numbers.
+         * Solution: Use cyclic sort to sort the elements in the array.
+         * While sorting, ignore negative numbers and numbers >= the
+         * length of the array. After sorting, the element not in the
+         * correct index is the first missing positive number. Where
+         * the correct index of the element at i is i+1 because we are
+         * dealing with elements in the range (1,n). E.g arr[0] == 1.
+         * At the end, return nums.length + 1 because 0 isn't a positive
+         * number and nums.length might equal 0.
          */
         int i = 0;
         while (i < nums.length) {
@@ -798,10 +789,194 @@ public class LeetCode {
         for (i = 0; i < nums.length; i++) {
 //            If nums[i] != i + 1, this is the first missing positive
 //            number. e.g. nums[0] == 1
-            if (nums[i] != i + 1)
-                return i + 1;
+            if (nums[i] != i + 1) return i + 1;
         }
 //        At the end, return nums.length + 1
         return nums.length + 1;
+    }
+
+    /* LeetCode: 169. Majority Element */
+    static int majorityElement(int[] nums) {
+        /*
+         * So I found that some dude already invented an algorithm
+         * for this problem, and it is called the Linear Time
+         * Majority Vote Algorithm. It can be found here:
+         * https://www.cs.utexas.edu/~moore/best-ideas/mjrty/
+         * So what this algorithm basically does is each element
+         * votes for itself against other elements and in the end,
+         * the element with the most votes wins.
+         */
+
+//        Initially, the majority element and its votes is unknown
+//        and the counter is 0
+        int major = 0;
+        int count = 0;
+//        We loop through the elements
+        for (int i = 0; i < nums.length; i++) {
+//            if count == 0, we set the major element to the
+//            current element and increment count
+            if (count == 0) {
+                major = nums[i];
+                count++;
+            }
+//            If the counter is not 0, we increment or decrement
+//            the counter according to whether e is the current
+//            candidate. i.e, if major element == current element,
+//            we increment count
+            else if (major == nums[i]) {
+                count++;
+            }
+//            Else, we decrement count.
+            else count--;
+        }
+        return major;
+    }
+
+    /* LeetCode: 414. Third Maximum Number */
+    static int thirdMax(int[] nums) {
+        /*
+         * The solution below only works with arrays that doesn't have
+         * duplicates. The idea is to just basically sort the array
+         * using Cyclic sort (O(n) time), then loop through the sorted
+         * array from nums.length - 1 to 0 and increment a counter until
+         * we reach 3. The element at the time the counter is three is
+         * the third maximum element. When the third maximum element
+         * doesn't exist, return the largest element in the array.
+         */
+        int count = 0, i = 0, thirdMax = Integer.MAX_VALUE, max = 0;
+        boolean hasDuplicate = false;
+        while (i < nums.length) {
+            int j = nums[i] - 1;
+
+            if (nums[i] <= nums.length && nums[i] != 0 && nums[i] != nums[j]) {
+                int temp = nums[i];
+                nums[i] = nums[j];
+                nums[j] = temp;
+            } else {
+                i++;
+                if (i == j)
+                    hasDuplicate = true;
+            }
+        }
+        System.out.println(Arrays.toString(nums));
+        for (i = nums.length - 1; i >= 0; i--) {
+            if (nums[i] > max)
+                max = nums[i];
+            if (hasDuplicate) {
+                hasDuplicate = false;
+                continue;
+            }
+            if (nums[i] < thirdMax) {
+                thirdMax = nums[i];
+                count++;
+                if (count >= 3) {
+                    return nums[i];
+                }
+            }
+        }
+        return max;
+    }
+
+    /* LeetCode: 455. Assign Cookies */
+//    static int findContentChildren(int[] g, int[] s) {
+//        int i = 0, j = 0;
+//        while (i < g.length) {
+//            int correct =
+//            if (g[i] )
+//        }
+//        Arrays.sort(g);
+//        Arrays.sort(s);
+//        int i = 0;
+//        for (int j = 0; i < g.length && j < s.length; j++) {
+//            if (g[i] <= s[j]) i++;
+//        }
+//        return i;
+//    }
+
+    /*LeetCode: 628. Maximum Product of Three Numbers */
+    static int maximumProduct(int[] arr) {
+//         Using insertion sort
+//        External loop handles the sorting
+        for (int i = arr.length - 1; i >= 0; i--) {
+//        This variable keeps track of the current largest element
+            int largest = 0;
+//            Internal loop handles finding the largest element
+            for (int j = 0; j <= i; j++) {
+                if (Math.abs(arr[j]) > Math.abs(arr[largest])) {
+                    largest = j;
+                }
+            }
+//            If i == largest, that means arr[i] is already sorted
+            if (i == largest)
+                continue;
+//            Swap the largest element to its correct position.
+            int temp = arr[i];
+            arr[i] = arr[largest];
+            arr[largest] = temp;
+        }
+
+        System.out.println(Arrays.toString(arr));
+
+        int maxProduct = 1;
+        int count = 0;
+        int k = arr.length - 1;
+        while (count < 3 && k >= 0) {
+            maxProduct *= arr[k];
+            k--;
+            count++;
+        }
+        return maxProduct;
+    }
+
+    /* LeetCode: 1108. Defanging an IP Address */
+    static String defangIPaddr(String address) {
+//        Use a sting builder for better performance
+        StringBuilder builder = new StringBuilder();
+//        Loop through the address (O(n) time)
+        for (int i = 0; i < address.length(); i++) {
+//            If the current character is a dot, append [.] to the builder
+            if (address.charAt(i) == '.')
+                builder.append("[.]");
+//            Else, append the current character to the builder
+            else builder.append(address.charAt(i));
+        }
+//        Return the builder's string
+        return builder.toString();
+    }
+
+    /* LeetCode: 1528. Shuffle String */
+    static String restoreString(String s, int[] indices) {
+//         Convert the string s to a CharArray to easily carryout cyclic sort.
+        char[] arr = s.toCharArray();
+//         Using cyclic sort since elements are in range (0,n)
+        int i = 0;
+        while (i < indices.length) {
+            int j = indices[i];
+//             If (current element != i) swap.
+//             e.g if indices[0] != 0
+            if (indices[i] != i) {
+//                 Swap the indices. The indices hold the correct position of the characters.
+                int temp = indices[i];
+                indices[i] = indices[j];
+                indices[j] = temp;
+//                     Swap the characters
+                char ch = arr[i];
+                arr[i] = arr[j];
+                arr[j] = ch;
+            }
+            else
+                i++;
+        }
+//         In the end, return the string value of the CharArray.
+        return String.valueOf(arr);
+    }
+
+    /* LeetCode: 81. Search in Rotated Sorted Array II */
+    static  boolean searchInRotated(int[] nums, int target) {
+//        int start = 0;
+//        int end = nums.length;
+//        int pivot = findPivot(nums);
+//        while ()
+        return false;
     }
 }
