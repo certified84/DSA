@@ -6,7 +6,7 @@ import java.util.stream.IntStream;
 public class LeetCode {
 
     public static void main(String[] args) {
-        int[] nums = {2,5,6,0,0,1,2};
+        int[] nums = {2, 5, 6, 0, 0, 1, 2};
         String name = new String("Sammie");
         String name2 = new String("Sammie");
         int target = 3;
@@ -963,8 +963,7 @@ public class LeetCode {
                 char ch = arr[i];
                 arr[i] = arr[j];
                 arr[j] = ch;
-            }
-            else
+            } else
                 i++;
         }
 //         In the end, return the string value of the CharArray.
@@ -972,11 +971,89 @@ public class LeetCode {
     }
 
     /* LeetCode: 81. Search in Rotated Sorted Array II */
-    static  boolean searchInRotated(int[] nums, int target) {
+    static boolean searchInRotated(int[] nums, int target) {
 //        int start = 0;
 //        int end = nums.length;
 //        int pivot = findPivot(nums);
 //        while ()
+        return false;
+    }
+
+    /* LeetCode: 4. Median of Two Sorted Arrays */
+    static double findMedianSortedArrays(int[] nums1, int[] nums2) {
+//         First create a new array to store the merged arrays
+        int[] mergedNums = mergeSortedArray(nums1, nums2);
+//         Two conditions needs to be checked to determine the median to be returned
+//         Check if the length of the mergedNums is even or odd.
+//         If it is even, return (mergedNums[mid] + mergedNums[mid + 1]) / 2.0
+//         else, return mergedNums[mid]
+        int mid = (mergedNums.length - 1) / 2;
+        if (mergedNums.length % 2 == 0)
+            return (mergedNums[mid] + mergedNums[mid + 1]) / 2.0;
+        else
+            return mergedNums[mid];
+    }
+
+    static int[] mergeSortedArray(int[] nums1, int[] nums2) {
+        int[] mergedArray = new int[nums1.length + nums2.length];
+        int i = 0, j = 0;
+        while (i < nums1.length && j < nums2.length) {
+            if (nums1[i] < nums2[j]) {
+                mergedArray[i + j] = nums1[i];
+                i++;
+            } else {
+                mergedArray[i + j] = nums2[j];
+                j++;
+            }
+        }
+        if (i < nums1.length)
+            for (i = i; i < nums1.length; i++) {
+                mergedArray[i + j] = nums1[i];
+            }
+        if (j < nums2.length)
+            for (j = j; j < nums2.length; j++) {
+                mergedArray[i + j] = nums2[j];
+            }
+        return mergedArray;
+    }
+
+    /* LeetCode: 74. Search a 2D Matrix */
+    static boolean searchMatrix(int[][] matrix, int target) {
+
+//        Brute force solution: Using Linear Search with O(n^2) time complexity
+        /*for (int row = 0; row < matrix.length; row++) {
+            for (int col = 0; col < matrix[row].length; col++) {
+                if (matrix[row][col] == target)
+                    return true;
+            }
+        }*/
+
+//        Using two pointer method since matrix is row column sorted. O(n) time complexity
+        /*int row = 0, col = matrix[row].length - 1;
+        while (row < matrix.length && col >= 0) {
+            if (matrix[row][col] == target)
+                return true;
+            else if (matrix[row][col] > target)
+                col--;
+            else
+                row++;
+        }*/
+
+//        Using binary search method since matrix is row column sorted. O(log(n)) time complexity
+        int rStart = 0, rEnd = matrix.length - 1;
+        int current = rStart + (rEnd - rStart) / 2;
+        int colStart = 0, colEnd = matrix[current].length - 1;
+        while (rStart < rEnd && colStart < colEnd) {
+            int mid = colStart + (colEnd - colStart) / 2;
+            if (matrix[current][mid] == target)
+                return true;
+            else if (matrix[current][mid] > target) {
+                colEnd = mid - 1;
+            }
+            else
+                colStart = mid + 1;
+        }
+
         return false;
     }
 }

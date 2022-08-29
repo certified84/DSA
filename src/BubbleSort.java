@@ -13,6 +13,8 @@ public class BubbleSort {
         boolean isSorted;
 //            Loop to handle the passes
         for (int i = 0; i < array.length; i++) {
+//            Variable to check if the array is sorted and ignore other pass
+//            If no swapping occurs, the array is sorted.
             isSorted = true;
 //              Loop to handle the swapping
             for (int j = 1; j < array.length - i; j++) {
