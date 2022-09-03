@@ -238,7 +238,7 @@ public class LeetCode {
     }
 
     //    LeetCode: 167. Two Sum II - Input Array Is Sorted
-    static int[] twoSum(int[] numbers, int target) {
+    static int[] twoSumII(int[] numbers, int target) {
 
         int start = 0;
         int end = numbers.length - 1;
@@ -1055,5 +1055,44 @@ public class LeetCode {
         }
 
         return false;
+    }
+
+    /* LeetCode: 1. Two Sum */
+    static int[] twoSum(int[] nums, int target) {
+//        Brute Force. Time complexity O(n^n)
+//        for (int i = 0; i < nums.length; i++) {
+//            for (int j = i + 1; j < nums.length; j++) {
+//                if (nums[i] + nums[j] == target)
+//                    return new int[]{i, j};
+//            }
+//        }
+
+//         Optimized using hashmap. Time complexity O(n)
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int i = 0; i < nums.length; i++) {
+//             At position i, the next value that sums up to
+//             the target will be target - nums[i]
+            int expected = target - nums[i];
+//             At the begining, the HashMap is empty.
+//             If the HashMap doesn't contain a key
+//             of the expected element i.e. element that
+//             should give the target when summed with the
+//             current element nums[i], add the current element
+//             to the HashMap with the element as the key, and it's
+//             index as the value. This is because we are concerned
+//             with returning the index of the two elements that sums
+//             up to the target and not the element itself.
+            if (!map.containsKey(expected))
+                map.put(nums[i], i);
+//             Else, the HashMap contains the expected value as a key
+//             which means we've found our answer. Hence, return the
+//             value (i.e. index) of the expected element in the HashMap
+//             and the index of the current element.
+            else return new int[]{map.get(expected), i};
+        }
+
+//         Something has to be returned in the end. But it is guaranteed that
+//         this piece of code will not run since nums has exactly one solution.
+        return new int[]{0, 0};
     }
 }

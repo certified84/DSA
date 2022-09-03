@@ -13,10 +13,89 @@ public class Practice {
 //        System.out.println(builder);
 //        reverse(120);
 //        System.out.println(Arrays.toString(commonChars(new String[]{"cool", "lock", "cook"}).toArray()));
-        int[][] matrix = {{10, 20, 30, 40}, {15, 25, 35, 45}, {28, 29, 37, 49}, {33, 34, 38, 50}};
-        int target = 43;
-        System.out.println(searchMatrix(matrix, target));
+        List<Integer> teamA = new ArrayList<>();
+        teamA.add(4);
+        teamA.add(4);
+        teamA.add(1);
+        teamA.add(3);
+        System.out.println(birthdayCakeCandles(teamA));
     }
+
+    static int birthdayCakeCandles(List<Integer> candles) {
+        // Write your code here
+        int tallest = 0, count = 1;
+        // Find the tallest and count in one loop O(n)
+        for (int i = 0; i < candles.size(); i++) {
+            if (candles.get(i) > tallest) {
+                tallest = candles.get(i);
+                continue;
+            }
+            if (candles.get(i) == tallest)
+                count++;
+        }
+        return count;
+    }
+
+    static String breakPalindrome(String palindromeStr) {
+        // Write your code here
+
+        // Overall Time complexity O(n)
+
+        System.out.println(palindromeStr);
+
+        if (palindromeStr.length() == 1)
+            return "IMPOSSIBLE";
+
+        // step to check if all characters are 'a'
+        boolean allA = true;
+        for (int i = 0; i < palindromeStr.length(); i++) {
+            if (palindromeStr.charAt(i) != 'a') {
+                allA = false;
+                break;
+            }
+        }
+        if (allA)
+            return "IMPOSSIBLE";
+
+        // Step to handle modification of palindromeStr using StringBuilder
+        StringBuilder builder = new StringBuilder();
+        int check = 0;
+        for (int i = 0; i < palindromeStr.length(); i++) {
+            if (check < 1 && palindromeStr.charAt(i) != 'a') {
+                check++;
+                builder.append('a');
+                continue;
+            }
+            builder.append(palindromeStr.charAt(i));
+        }
+        return builder.toString();
+    }
+
+    static List<Integer> counts(List<Integer> teamA, List<Integer> teamB) {
+        // Write your code here
+        List<Integer> ans = new ArrayList<>();
+
+//        convert teamA to an array and sort
+        int[] arrA = new int[teamA.size()];
+        for (int i = 0; i < teamA.size(); i++) {
+            arrA[i] = teamA.get(i);
+        }
+        Arrays.sort(arrA);
+
+        for (int i = 0; i < teamB.size(); i++) {
+            int end = arrA.length - 1, count = 0;
+            while (end >= 0) {
+                if (arrA[end] <= teamB.get(i)) {
+                    count += end + 1;
+                    break;
+                }
+                end--;
+            }
+            ans.add(count);
+        }
+        return ans;
+    }
+
 
     static void balanced(String name) {
         int lCount = 0, rCount = 0;
@@ -171,5 +250,71 @@ public class Practice {
                 mergedArray[i + j] = nums2[j];
             }
         System.out.println(Arrays.toString(mergedArray));
+    }
+
+    static int[] twoSum(int[] nums, int target) {
+//        Brute Force. Time complexity O(n^n)
+//        for (int i = 0; i < nums.length; i++) {
+//            for (int j = i + 1; j < nums.length; j++) {
+//                if (nums[i] + nums[j] == target)
+//                    return new int[]{i, j};
+//            }
+//        }
+//         Optimized using hashmap. Time complexity O(n)
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int i = 0; i < nums.length; i++) {
+//             At position i, the next value that sums up to
+//             the target will be target - nums[i]
+            int expected = target - nums[i];
+//             At the begining, the HashMap is empty.
+//             If the HashMap doesn't contain a key
+//             of the expected element i.e. element that
+//             should give the target when summed with the
+//             current element nums[i], add the current element
+//             to the HashMap with the element as the key, and it's
+//             index as the value. This is because we are concerned
+//             with returning the index of the two elements that sums
+//             up to the target and not the element itself.
+            if (!map.containsKey(expected))
+                map.put(nums[i], i);
+//             Else, the HashMap contains the expected value as a key
+//             which means we've found our answer. Hence, return the
+//             value (i.e. index) of the expected element in the HashMap
+//             and the index of the current element.
+            else return new int[]{map.get(expected), i};
+        }
+
+//         Something has to be returned in the end. But it is guaranteed that
+//         this piece of code will not run since nums has exactly one solution.
+        return new int[]{0, 0};
+    }
+
+    static int lengthOfLongestSubstring(String s) {
+        Map<Character, Integer> map = new HashMap<>();
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < s.length(); i++) {
+            if (map.containsKey(s.charAt(i))) {
+                break;
+            }
+            map.put(s.charAt(i), i);
+            builder.append(s.charAt(i));
+        }
+        return builder.length();
+    }
+
+    static boolean lint(String s) {
+        Stack<Character> stack = new Stack<>();
+        for (int i = 0; i < s.length(); i++) {
+            if (s.charAt(i) != '(' || s.charAt(i) != ')')
+                continue;
+            if (s.charAt(i) == '(') {
+                stack.push(s.charAt(i));
+            } else if (s.charAt(i) == ')') {
+                if (stack.peek() == '(')
+                    stack.pop();
+                else return false;
+            }
+        }
+        return true;
     }
 }
