@@ -6,11 +6,11 @@ import java.util.stream.IntStream;
 public class LeetCode {
 
     public static void main(String[] args) {
-        int[] nums = {2, 5, 6, 0, 0, 1, 2};
+        int[] nums = {4, 1, 2, 1, 2};
         String name = new String("Sammie");
         String name2 = new String("Sammie");
         int target = 3;
-        System.out.println(searchInRotated(nums, target));
+        System.out.println(singleNumber(nums));
     }
 
     static void swap(int[] arr, int i, int j) {
@@ -1049,8 +1049,7 @@ public class LeetCode {
                 return true;
             else if (matrix[current][mid] > target) {
                 colEnd = mid - 1;
-            }
-            else
+            } else
                 colStart = mid + 1;
         }
 
@@ -1094,5 +1093,61 @@ public class LeetCode {
 //         Something has to be returned in the end. But it is guaranteed that
 //         this piece of code will not run since nums has exactly one solution.
         return new int[]{0, 0};
+    }
+
+    /* LeetCode: 136. Single Number */
+    static int singleNumber(int[] nums) {
+//         Optimized using HashMap with O(n) time complexity.
+//         Although space complexity isn't constant
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int i = 0; i < nums.length; i++) {
+//             At the beginning, the HashMap is empty.
+//             If the HashMap doesn't contain a key
+//             of the current element, add the current element
+//             to the HashMap with the element as the key, and it's
+//             index as the value.
+            if (!map.containsKey(nums[i]))
+                map.put(nums[i], i);
+//            Else, the HashMap already contains the current element
+//            as a key and this means that the current element is a
+//            duplicate. Hence, remove it from the HashMap.
+            else map.remove(nums[i]);
+        }
+//        In the end, only one key-value pair will remain in the HashMap
+//        and this is the single element since all duplicates has been
+//        gotten rid of with the loop above. Hence, returning the only
+//        element left in the HashMap.
+        for (int j = 0; j < nums.length; j++) {
+            if (map.containsKey(nums[j]))
+                return nums[j];
+        }
+//         Something has to be returned in the end. But it is guaranteed that
+//         this piece of code will not run since nums has exactly one single number.
+        return 0;
+    }
+
+    /*LeetCode: 69. Sqrt(x)*/
+    static int sqrt(int x) {
+        if (x == 0)
+            return 0;
+        if (x == 1)
+            return 1;
+        int start = 1, end = x / 2;
+        long square = 0;
+//        The square root i of a number x is one such that i * i = x
+        while (start <= end) {
+            int mid = start + (end - start) / 2;
+            square = (long) mid * mid;
+            if (square == x)
+                return mid;
+            if (square > x)
+                end = mid - 1;
+            else
+                start = mid + 1;
+        }
+        square = (long) start * start;
+        if (square > x)
+            return start - 1;
+        else return start + 1;
     }
 }

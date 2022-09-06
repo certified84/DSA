@@ -18,7 +18,7 @@ public class Practice {
         teamA.add(4);
         teamA.add(1);
         teamA.add(3);
-        System.out.println(birthdayCakeCandles(teamA));
+//        System.out.println(birthdayCakeCandles(teamA));
     }
 
     static int birthdayCakeCandles(List<Integer> candles) {
