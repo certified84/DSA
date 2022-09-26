@@ -3,15 +3,8 @@ import java.util.*;
 
 public class Practice {
     public static void main(String[] args) {
-        List<Integer> arr1 = new ArrayList<>();
-        List<Integer> arr2 = new ArrayList<>();
-
-        arr1.add(1);
-        arr1.add(2);
-        arr1.add(3);
-        arr2.add(2);
-        arr2.add(4);
-        System.out.println(counts(arr1, arr2));
+        int n = 6;
+        System.out.println(countPrimes(n));
     }
 
     static String primeTime(int num) {
@@ -654,6 +647,7 @@ public class Practice {
         }
         return moves;
     }
+
     static List<Integer> counts(List<Integer> teamA, List<Integer> teamB) {
 //        Question 2: Football scores
         Collections.sort(teamA);
@@ -670,5 +664,21 @@ public class Practice {
             ans.add(start);
         }
         return ans;
+    }
+
+    static void sieve(int n) {
+        boolean[] primes = new boolean[n + 1];
+        for (int i = 2; i <= (int) Math.sqrt(n); i++) {
+            if (!primes[i]) {
+                for (int j = i * i; j <= n; j += i) {
+                    primes[j] = true;
+                }
+            }
+        }
+
+        for (int i = 2; i < primes.length; i++) {
+            if (!primes[i])
+                System.out.println(i + " is prime");
+        }
     }
 }

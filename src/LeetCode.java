@@ -1482,4 +1482,26 @@ public class LeetCode {
         }
         return result;
     }
+
+    /* LeetCode: 204. Count Primes */
+    static int countPrimes(int n) {
+
+//         Overall time complexity O(n)
+//         Using sieve of eratosthenes method;
+        boolean[] primes = new boolean[n + 1];
+        for (int i = 2; i <= (int) Math.sqrt(n); i++) {
+            if (!primes[i]) {
+                for (int j = i * i; j < primes.length; j += i) {
+                    primes[j] = true;
+                }
+            }
+        }
+
+        int count = 0;
+        for (int i = 2; i < n; i++) {
+            if (!primes[i])
+                count++;
+        }
+        return count;
+    }
 }
