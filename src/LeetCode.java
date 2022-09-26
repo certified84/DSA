@@ -6,11 +6,9 @@ import java.util.stream.IntStream;
 public class LeetCode {
 
     public static void main(String[] args) {
-        int[] nums = {4, 1, 2, 1, 2};
-        String name = new String("Sammie");
-        String name2 = new String("Sammie");
-        int target = 3;
-        System.out.println(singleNumber(nums));
+        int[] nums = {75, 5, -5, 75, -2, -3, 88, 10, 10, 87};
+        int target = 85;
+        System.out.println(Arrays.toString(threeSum(new int[]{-1, 0, 1, 2, -1, -4}).toArray()));
     }
 
     static void swap(int[] arr, int i, int j) {
@@ -254,7 +252,7 @@ public class LeetCode {
             else break;
         }
 
-//        The question says return the start and end indexes as start + 1 and end + 1
+//        The question says return the start and end indexes as 1-indexed
         return new int[]{++start, ++end};
     }
 
@@ -1149,5 +1147,339 @@ public class LeetCode {
         if (square > x)
             return start - 1;
         else return start + 1;
+    }
+
+    /* LeetCode: 154. Find Minimum in Rotated Sorted Array II */
+    static int findMinII(int[] nums) {
+//        Linear Search: O(n)
+        int min = Integer.MAX_VALUE;
+        for (int i = 0; i < nums.length; i++) {
+            if (min > nums[i])
+                min = nums[i];
+        }
+        return min;
+    }
+
+    /* LeetCode: 520. Detect Capital  */
+    static boolean detectCapitalUse(String word) {
+
+        int count = 0;
+        for (int i = 0; i < word.length(); i++) {
+            if (Character.isUpperCase(word.charAt(i)))
+                count++;
+        }
+
+        return count == word.length() || count == 0 || (count == 1 && Character.isUpperCase(word.charAt(0)));
+    }
+
+    static String capitalizeTitle(String title) {
+//        Create a string array of each word in title in lowercase
+        String[] words = title.toLowerCase().split(" ");
+//        Word to be returned. Using a StringBuilder because it supports string manipulation
+        StringBuilder word = new StringBuilder();
+        for (int i = 0; i < words.length; i++) {
+//            If the current word is 1 or 2 letters, append as is
+            if (words[i].length() <= 2) {
+                word.append(words[i]).append(" ");
+                continue;
+            }
+
+//            If the condition above doesn't pass, capitalize the first letter of the current word
+            StringBuilder current = new StringBuilder(words[i] + " ");
+            current.replace(0, 1, Character.toUpperCase(current.charAt(0)) + "");
+            word.append(current);
+        }
+//        In the end, return the word as a string and trim it as it will contain a space at the end.
+        return word.toString().trim();
+    }
+
+    /* LeetCode: 557. Reverse Words in a String III */
+    static String reverseWords(String s) {
+        StringBuilder builder = new StringBuilder();
+        String[] strings = s.split(" ");
+        for (int i = 0; i < strings.length; i++) {
+            StringBuilder current = new StringBuilder(strings[i]);
+            builder.append(current.reverse()).append(" ");
+        }
+        return builder.toString().trim();
+    }
+
+    /* LeetCode: 125. Valid Palindrome */
+    static boolean isPalindrome(String s) {
+        String parsed = s.toLowerCase();
+        int start = 0, end = parsed.length() - 1;
+        while (start <= end) {
+
+            if (!Character.isLetterOrDigit(parsed.charAt(start))) {
+                start++;
+                continue;
+            }
+
+            if (!Character.isLetterOrDigit(parsed.charAt(end))) {
+                end--;
+                continue;
+            }
+
+            if (parsed.charAt(start++) != parsed.charAt(end--))
+                return false;
+        }
+        return true;
+    }
+
+    static String parse(String s) {
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < s.length(); i++) {
+            if (Character.isAlphabetic(s.charAt(i)) || Character.isDigit(s.charAt(i)))
+                builder.append(s.charAt(i));
+        }
+        return builder.toString();
+    }
+
+    /* LeetCode: 345. Reverse Vowels of a String */
+    static String reverseVowels(String s) {
+//        StringBuilder builder = new StringBuilder(s);
+        char[] chars = s.toCharArray();
+        int start = 0, end = chars.length - 1;
+        while (start <= end) {
+            if (isVowel(s.charAt(start)) && isVowel(s.charAt(end))) {
+//                builder.replace(start, start + 1, s.charAt(end) + "");
+//                builder.replace(end, end + 1, s.charAt(start) + "");
+                char temp = chars[start];
+                chars[start++] = chars[end];
+                chars[end--] = temp;
+//                start++;
+//                end--;
+                continue;
+            }
+            if (!isVowel(s.charAt(start))) start++;
+            if (!isVowel(s.charAt(end))) end--;
+        }
+        return new String(chars);
+    }
+
+    static boolean isVowel(char ch) {
+        return ch == 'a' || ch == 'e' || ch == 'i' || ch == 'o' || ch == 'u' || ch == 'A' || ch == 'E' || ch == 'I' || ch == 'O' || ch == 'U';
+    }
+
+    /* LeetCode: 14. Longest Common Prefix */
+    static String longestCommonPrefix(String[] strs) {
+//         Time complexity: O(n^2)
+//         It is guaranteed that strs will have atleast one element; 1 <= strs.length <= 200
+        if (strs.length <= 1)
+            return strs[0];
+        StringBuilder longest = new StringBuilder();
+        int j = 0;
+        while (j < strs[0].length()) {
+//             When all the elements in strs has str[0].charsAt(j), contains will be true
+            boolean contains = false;
+            for (int i = 1; i < strs.length; i++) {
+                if (j >= strs[i].length() || strs[0].charAt(j) != strs[i].charAt(j)) {
+                    contains = false;
+                    break;
+                }
+                contains = true;
+            }
+//             Since we are looking for the longest common prefix, break out of the loop if contains is false
+            if (contains) {
+                longest.append(strs[0].charAt(j));
+                j++;
+            } else break;
+        }
+        return longest.toString();
+    }
+
+    // TODO: 14/09/2022
+    /* LeetCode: 3. Longest Substring Without Repeating Characters */
+    static int lengthOfLongestSubstring(String s) {
+        if (s.length() <= 1) return s.length();
+        int count = 0, longest = 0;
+        Map<Character, Integer> map = new HashMap<>();
+        for (int i = 0; i < s.length(); i++) {
+            if (!map.containsKey(s.charAt(i))) {
+                map.put(s.charAt(i), i);
+                count++;
+                continue;
+            }
+            map = new HashMap<>();
+            map.put(s.charAt(i), i);
+            longest = Math.max(count, longest);
+            count = 1;
+        }
+        return Math.max(longest, count);
+    }
+
+    /* LeetCode: 50. Pow(x, n) */
+    static double myPow(double x, int n) {
+
+        if (n == 0 || x == 1) return 1;
+//        if (n == Integer.MIN_VALUE) return 0;
+
+        return Math.pow(x, n);
+    }
+
+    /*LeetCode: 1497. Check If Array Pairs Are Divisible by k */
+//    static boolean canArrange(int[] arr, int k) {
+//        int[] mod = new int[k];
+//        for (int i = 0; i < arr.length; i++) {
+//            mod[(arr[i] % k + k) % k]++;
+//        }
+//        if (mod[0] % 2 != 0) return false;
+//        for (int i = 1; i < k; i++) {
+//            if (mod[i] != mod[k - i]) return false;
+//        }
+//        return true;
+//    }
+    static boolean canArrange(int[] nums, int k) {
+        System.out.println(-5 % 85);
+        int count = 0;
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int i = 0; i < nums.length; i++) {
+            if (map.containsKey(i))
+                continue;
+            int j = i + 1;
+            while (j < nums.length) {
+                if (map.containsKey(j)) {
+                    j++;
+                    continue;
+                }
+                int sum = nums[i] + nums[j];
+                if (sum % k == 0) {
+//                    Since the array could contain duplicates, we store the
+//                    position as the key and arr[position] as the value
+                    map.put(i, nums[i]);
+                    map.put(j, nums[j]);
+                    count++;
+                    break;
+                }
+                j++;
+            }
+        }
+        System.out.println(count);
+        return count == nums.length / 2;
+    }
+
+    /* LeetCode: 217. Contains Duplicate */
+    public boolean containsDuplicate(int[] nums) {
+//         Using HashMap
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int i = 0; i < nums.length; i++) {
+            if (map.containsKey(nums[i]))
+                return true;
+            map.put(nums[i], i);
+        }
+        // return false;
+
+//         Using HashSet
+        Set<Integer> set = new HashSet<>();
+        for (int num : nums) {
+            if (!set.add(num))
+                return true;
+        }
+        return false;
+    }
+
+    /* LeetCode: 242. Valid Anagram */
+    static boolean isAnagram(String s, String t) {
+
+        if (s.length() != t.length()) return false;
+
+        char[] sArr = s.toCharArray();
+        Arrays.sort(sArr);
+
+        Map<Character, Integer> sMap = new HashMap<>();
+        Map<Character, Integer> tMap = new HashMap<>();
+
+//        Since they are both of the same length, one loop is enough
+//        to add the elements to the individual map
+        for (int i = 0; i < s.length(); i++) {
+//            the getOrDefault method returns the value to which the
+//            specified key is mapped, or defaultValue if this map contains
+//            no mapping for the key. If the map already contains the key,
+//            increment the value by 1 else add the key with a value  of 1
+            sMap.put(s.charAt(i), sMap.getOrDefault(s.charAt(i), 1) + 1);
+            tMap.put(t.charAt(i), tMap.getOrDefault(t.charAt(i), 1) + 1);
+        }
+
+        for (char key : tMap.keySet()) {
+            if (sMap.containsKey(key) && sMap.get(key).equals(tMap.get(key)))
+                sMap.remove(key);
+        }
+
+        return sMap.isEmpty();
+    }
+
+    /* LeetCode: 268. Missing Number */
+    static int missingNumberL(int[] nums) {
+//        Using Gauss' Sum Formula
+//        Here, missing = sum of all numbers in the range (0, n).
+//        Where n is the length of the array.
+        int missing = nums.length * (nums.length + 1) / 2;
+        for (int num : nums) {
+//            Subtract each element in the array from the sum (missing)
+            missing -= num;
+        }
+//        In the end, missing == sum of all numbers in the
+//        range(0, n) - sum of all elements in the array
+        return missing;
+//        int missing = 0;
+//        for (int i = 1; i <= nums.length; i++) {
+//            missing ^= i;
+//        }
+//        for (int num : nums) {
+//            missing ^= num;
+//        }
+//        return missing;
+    }
+
+    /* LeetCode: 832. Flipping an Image */
+    static int[][] flipAndInvertImage(int[][] image) {
+
+        for (int[] row : image) {
+            for (int column = 0; column < (row.length + 1) / 2; column++) {
+//                Inverting (element xor 1) the image before Flipping (swap)
+                int temp = row[column] ^ 1;
+                row[column] = row[row.length - 1 - column] ^ 1;
+                row[row.length - 1 - column] = temp;
+            }
+        }
+
+        for (int row = 0; row < image.length; row++) {
+            int start = 0, end = image[row].length - 1;
+            while (start <= end) {
+//                Inverting (element xor 1) the image before Flipping (swap)
+                int temp = image[row][start] ^ 1;
+                image[row][start] = image[row][end] ^ 1;
+                image[row][end] = temp;
+
+                start++;
+                end--;
+            }
+        }
+        return image;
+    }
+
+
+    /* LeetCode: 15. 3Sum */
+    static List<List<Integer>> threeSum(int[] nums) {
+
+        List<List<Integer>> result = new ArrayList<>();
+        Map<Integer, Integer> map = new HashMap<>();
+
+        for (int i = 0; i < nums.length; i++) {
+            for (int j = i + 1; j < nums.length; j++) {
+                int expected = -nums[i] - nums[j];
+                if (map.containsKey(expected) && expected != nums[i] && expected != nums[j]) {
+                    List<Integer> list = new ArrayList<>();
+                    list.add(nums[j]);
+                    list.add(nums[i]);
+                    list.add(expected);
+                    result.add(list);
+                } else {
+                    map.put(nums[j], j);
+//                    map.put(nums[i], i);
+                }
+            }
+        }
+        return result;
     }
 }

@@ -3,22 +3,288 @@ import java.util.*;
 
 public class Practice {
     public static void main(String[] args) {
-//        StringBuilder builder = new StringBuilder();
-//        for (int i = 0; i < 26; i++) {
-//            char ch = (char) ('a' + i);
-//            builder.append(ch);
+        List<Integer> arr1 = new ArrayList<>();
+        List<Integer> arr2 = new ArrayList<>();
+
+        arr1.add(1);
+        arr1.add(2);
+        arr1.add(3);
+        arr2.add(2);
+        arr2.add(4);
+        System.out.println(counts(arr1, arr2));
+    }
+
+    static String primeTime(int num) {
+        // code goes here
+
+        // Overal time complexity: O(sqrt(num))
+
+        if (num <= 2)
+            return "true";
+
+        // To reduce the search space, we iterate from i = 2 to sqrt(num)
+        // Since every possible number that can divide num will be encountered
+        // before and after sqrt(num) e.g 2 * 16 = 32 and 16 * 2 = 32.
+
+        for (int i = 2; i <= (int) Math.sqrt(num); i++) {
+            if (num % i == 0)
+                return "false";
+        }
+
+        return "true";
+    }
+
+//    static boolean prime(int n) {
+//        boolean isPrime = true;
+//        for (int i = 2; i < n; i++) {
+//            if (n % i == 0)
+//                return false;
 //        }
-//        System.out.println(builder);
-//        System.out.println(builder.reverse());
-//        System.out.println(builder);
-//        reverse(120);
-//        System.out.println(Arrays.toString(commonChars(new String[]{"cool", "lock", "cook"}).toArray()));
-        List<Integer> teamA = new ArrayList<>();
-        teamA.add(4);
-        teamA.add(4);
-        teamA.add(1);
-        teamA.add(3);
-//        System.out.println(birthdayCakeCandles(teamA));
+//        return isPrime;
+//    }
+
+    static String equivalentKeypresses(String[] strArr) {
+        // code goes here
+
+        // Overall time complexity: O(n)
+
+        StringBuilder first = new StringBuilder(strArr[0]);
+        StringBuilder second = new StringBuilder(strArr[1]);
+
+        boolean isBackspace = true;
+        while (isBackspace) {
+            if (first.charAt(0) == '-' && first.charAt(1) == 'B') {
+                first.deleteCharAt(0).deleteCharAt(0);
+                continue;
+            }
+            isBackspace = false;
+        }
+
+        isBackspace = true;
+        while (isBackspace) {
+            if (second.charAt(0) == '-' && second.charAt(1) == 'B') {
+                second.deleteCharAt(0).deleteCharAt(0);
+                continue;
+            }
+            isBackspace = false;
+        }
+
+        for (int i = 0; i < first.length(); i++) {
+            if (first.charAt(i) == 'B' && first.charAt(i - 1) == '-')
+                first.replace(i - 4, i + 1, "");
+        }
+
+        for (int i = 0; i < second.length(); i++) {
+            if (second.charAt(i) == 'B' && second.charAt(i - 1) == '-')
+                second.replace(i - 4, i + 1, "");
+        }
+
+        return String.valueOf(first.toString().equals(second.toString()));
+    }
+
+    static long repeatedString(String s, long n) {
+        // Write your code here
+        if (s.equals("a"))
+            return n;
+
+        StringBuilder builder = new StringBuilder(s);
+        while (builder.length() < n) {
+            builder.append(s);
+        }
+
+        int count = 0;
+        for (int i = 0; i < n; i++) {
+            if (builder.charAt(i) == 'a')
+                count++;
+        }
+
+        System.out.println(builder);
+        return count;
+    }
+
+    static void miniMaxSum(List<Integer> arr) {
+        // Write your code here
+
+        // Overall TIme complexity O(nlogn)
+
+        // Convert arr to an array and sort
+        int[] arrA = new int[arr.size()];
+        // O(n)
+        for (int i = 0; i < arr.size(); i++) {
+            arrA[i] = arr.get(i);
+        }
+        // O(nlogn)
+        Arrays.sort(arrA);
+
+        long max = 0L, min = 0L;
+        // O(n)
+        for (int i = 0; i < arrA.length; i++) {
+            if (i == 0) {
+                min += arrA[i];
+                continue;
+            }
+            if (i == arrA.length - 1) {
+                max += arrA[i];
+                continue;
+            }
+            min += arrA[i];
+            max += arrA[i];
+        }
+        System.out.println(min + " " + max);
+    }
+
+    static String timeConversion(String s) {
+        // Write your code here
+        System.out.println(Integer.MAX_VALUE);
+        StringBuilder builder = new StringBuilder(s);
+        String[] strs = s.split(":");
+        int hh = Integer.parseInt(strs[0]);
+        if (strs[2].contains("PM") && hh < 12) {
+            hh += 12;
+            builder.replace(0, 2, String.valueOf(hh));
+        } else if (strs[2].contains("AM") && hh == 12) {
+            builder.replace(0, 2, "00");
+        }
+        builder.deleteCharAt(builder.length() - 1).deleteCharAt(builder.length() - 1);
+        System.out.println(s);
+        return builder.toString();
+    }
+
+    static String kangaroo(int x1, int v1, int x2, int v2) {
+        // Write your code here
+        while (x1 <= x2) {
+            x1 += v1;
+            x2 += v2;
+        }
+        System.out.println(x1);
+        System.out.println(x2);
+        if (x1 - v1 == x2 - v2)
+            return "YES";
+        else return "NO";
+    }
+
+
+    public void reverseString(char[] s) {
+        int start = 0, end = s.length - 1;
+        while (start <= end) {
+            char temp = s[start];
+            s[start] = s[end];
+            s[end] = temp;
+            start++;
+            end--;
+        }
+    }
+
+    static boolean threeSum(int[] arr) {
+        // code goes here
+        for (int i = 1; i < arr.length; i++) {
+            int current = arr[i];
+            Map<Integer, Integer> map = new HashMap<>();
+            for (int j = i + 1; j < arr.length; j++) {
+                int expected = arr[0] - current - arr[j];
+                if (!map.containsKey(expected)) {
+//                    map.put(arr[i], i);
+                    map.put(arr[j], j);
+                } else return true;
+            }
+        }
+        return false;
+    }
+
+    static String letterCount(String str) {
+        int larges = 0, position = -1;
+        String[] strs = str.split(" ");
+        for (int i = 0; i < strs.length; i++) {
+            StringBuilder builder = new StringBuilder(strs[i]);
+
+        }
+        return position > -1 ? strs[position] : "-1";
+    }
+
+    static long countPairsII(int[] nums, int k) {
+        long count = 0;
+        for (int i = 0; i < nums.length - 1; i++) {
+            for (int j = i + 1; j < nums.length; j++) {
+                long product = (long) nums[i] * nums[j];
+                if (product % k == 0)
+                    count++;
+            }
+        }
+        return count;
+    }
+
+    static void countApplesAndOranges(int s, int t, int a, int b, List<Integer> apples, List<Integer> oranges) {
+        // Write your code here
+        int applesCount = 0, orangesCount = 0;
+        for (int i = 0; i < apples.size(); i++) {
+            int position = apples.get(i) + a;
+            if (position >= s && position <= t)
+                applesCount++;
+        }
+        for (int j = 0; j < oranges.size(); j++) {
+            int position = oranges.get(j) + b;
+            if (position >= s && position <= t)
+                orangesCount++;
+        }
+        System.out.println(applesCount + "\n" + orangesCount);
+    }
+
+    static int[] gradingStudents(int[] grades) {
+        int[] roundedGrades = new int[grades.length];
+        for (int i = 0; i < grades.length; i++) {
+            int grade = grades[i];
+            int nextMultiple = ((grade - (grade % 5)) + 5);
+            if (grade >= 38 && nextMultiple - grade < 3)
+                roundedGrades[i] = nextMultiple;
+            else
+                roundedGrades[i] = grade;
+        }
+        return roundedGrades;
+    }
+
+    static boolean countPairs(int[] nums, int k) {
+//        Arrays.sort(nums);
+        int count = 0;
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int i = 0; i < nums.length; i++) {
+            if (map.containsKey(i))
+                continue;
+            for (int j = i + 1; j < nums.length; j++) {
+                int sum = nums[i] + nums[j];
+                if (sum % k == 0 && !map.containsKey(i) && !map.containsKey(j)) {
+                    map.put(i, nums[i]);
+                    map.put(j, nums[j]);
+                    count++;
+                }
+            }
+        }
+        System.out.println(count);
+        return count == nums.length / 2;
+    }
+
+    static int divisibleSumPairs(int n, int k, List<Integer> ar) {
+        // Write your code here
+        int count = 0, start = 0, end = ar.size() - 1;
+        while (start <= ar.size() - 2) {
+            int sum = ar.get(start) + ar.get(end);
+            if (sum % k == 0)
+                count++;
+            end--;
+            if (end == start) {
+                start++;
+                end = ar.size() - 1;
+            }
+        }
+        return count;
+    }
+
+    static int reverseNumber(int n) {
+        int reverse = 0;
+        while (n > 0) {
+            reverse = reverse * 10 + (n % 10);
+            n /= 10;
+        }
+        return reverse;
     }
 
     static int birthdayCakeCandles(List<Integer> candles) {
@@ -71,30 +337,30 @@ public class Practice {
         return builder.toString();
     }
 
-    static List<Integer> counts(List<Integer> teamA, List<Integer> teamB) {
-        // Write your code here
-        List<Integer> ans = new ArrayList<>();
-
-//        convert teamA to an array and sort
-        int[] arrA = new int[teamA.size()];
-        for (int i = 0; i < teamA.size(); i++) {
-            arrA[i] = teamA.get(i);
-        }
-        Arrays.sort(arrA);
-
-        for (int i = 0; i < teamB.size(); i++) {
-            int end = arrA.length - 1, count = 0;
-            while (end >= 0) {
-                if (arrA[end] <= teamB.get(i)) {
-                    count += end + 1;
-                    break;
-                }
-                end--;
-            }
-            ans.add(count);
-        }
-        return ans;
-    }
+//    static List<Integer> counts(List<Integer> teamA, List<Integer> teamB) {
+//        // Write your code here
+//        List<Integer> ans = new ArrayList<>();
+//
+////        convert teamA to an array and sort
+//        int[] arrA = new int[teamA.size()];
+//        for (int i = 0; i < teamA.size(); i++) {
+//            arrA[i] = teamA.get(i);
+//        }
+//        Arrays.sort(arrA);
+//
+//        for (int i = 0; i < teamB.size(); i++) {
+//            int end = arrA.length - 1, count = 0;
+//            while (end >= 0) {
+//                if (arrA[end] <= teamB.get(i)) {
+//                    count += end + 1;
+//                    break;
+//                }
+//                end--;
+//            }
+//            ans.add(count);
+//        }
+//        return ans;
+//    }
 
 
     static void balanced(String name) {
@@ -289,18 +555,18 @@ public class Practice {
         return new int[]{0, 0};
     }
 
-    static int lengthOfLongestSubstring(String s) {
-        Map<Character, Integer> map = new HashMap<>();
-        StringBuilder builder = new StringBuilder();
-        for (int i = 0; i < s.length(); i++) {
-            if (map.containsKey(s.charAt(i))) {
-                break;
-            }
-            map.put(s.charAt(i), i);
-            builder.append(s.charAt(i));
-        }
-        return builder.length();
-    }
+//    static int lengthOfLongestSubstring(String s) {
+//        Map<Character, Integer> map = new HashMap<>();
+//        StringBuilder builder = new StringBuilder();
+//        for (int i = 0; i < s.length(); i++) {
+//            if (map.containsKey(s.charAt(i))) {
+//                break;
+//            }
+//            map.put(s.charAt(i), i);
+//            builder.append(s.charAt(i));
+//        }
+//        return builder.length();
+//    }
 
     static boolean lint(String s) {
         Stack<Character> stack = new Stack<>();
@@ -316,5 +582,93 @@ public class Practice {
             }
         }
         return true;
+    }
+
+    static int pivotIndex(int[] nums) {
+        int total = 0;
+        for (int i = 0; i < nums.length; i++) {
+            total += nums[i];
+        }
+        int sum = 0;
+        for (int j = 0; j < nums.length; j++) {
+            sum += nums[j];
+            if (sum * 2 > total + nums[j])
+                break;
+            if (sum * 2 == total + nums[j])
+                return j;
+        }
+        return -1;
+    }
+
+    static int lengthOfLongestSubstring(String s) {
+        int longest = 0;
+        String jit = "";
+        for (int i = 0; i < s.length(); i++) {
+            longest = Math.max(jit.length(), longest);
+            if (jit.contains(s.charAt(i) + "")) {
+                jit = "";
+            }
+            jit = jit.concat(s.charAt(i) + "");
+        }
+        System.out.println(jit);
+        return Math.max(jit.length(), longest);
+    }
+
+    static boolean prime(int n) {
+        if (n <= 1)
+            return false;
+        int c = 2;
+        while (c * c <= n) {
+            if (n % c == 0)
+                return false;
+            c++;
+        }
+        return true;
+    }
+
+    static int countPrimes(int n) {
+        int count = 0;
+        for (int i = 0; i <= n; i++) {
+            if (prime(i))
+                count++;
+        }
+        return count;
+    }
+
+    /* Bloomberg Hackerrank */
+    static int minimumMoves(List<Integer> arr1, List<Integer> arr2) {
+//        Question 1: Hackerrank minimum moves
+        // Overall time complexity O(n^2)
+        int moves = 0;
+        for (int i = 0; i < arr1.size(); i++) {
+
+            String first = arr1.get(i).toString();
+            String second = arr2.get(i).toString();
+
+            for (int j = 0; j < first.length(); j++) {
+
+                if (first.charAt(j) == second.charAt(j))
+                    continue;
+                moves += Math.abs(first.charAt(j) - second.charAt(j));
+            }
+        }
+        return moves;
+    }
+    static List<Integer> counts(List<Integer> teamA, List<Integer> teamB) {
+//        Question 2: Football scores
+        Collections.sort(teamA);
+        List<Integer> ans = new ArrayList<>();
+        for (Integer integer : teamB) {
+            int start = 0, end = teamA.size() - 1;
+            // Binary search
+            while (start <= end) {
+                int mid = start + (end - start) / 2;
+                if (teamA.get(mid) > integer)
+                    end = mid - 1;
+                else start = mid + 1;
+            }
+            ans.add(start);
+        }
+        return ans;
     }
 }
