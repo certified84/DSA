@@ -1,10 +1,11 @@
+import org.jetbrains.annotations.Contract;
+
 import java.lang.reflect.Array;
 import java.util.*;
 
 public class Practice {
     public static void main(String[] args) {
-        int n = 6;
-        System.out.println(countPrimes(n));
+        int n = 12;
     }
 
     static String primeTime(int num) {
@@ -680,5 +681,61 @@ public class Practice {
             if (!primes[i])
                 System.out.println(i + " is prime");
         }
+    }
+
+    static double sqrt(int n, int p) {
+        int start = 0;
+        int end = n;
+
+        double root = 0.0;
+
+        while (start <= end) {
+            int mid = start + (end - start) / 2;
+
+            if (mid * mid == n)
+                return mid;
+
+            if (mid * mid > n) {
+                end = mid - 1;
+            } else {
+                start = mid + 1;
+                root = mid;
+            }
+        }
+        double incr = 0.1;
+        for (int i = 0; i < p; i++) {
+            while (root * root <= n) {
+                root += incr;
+            }
+            root -= incr;
+            incr /= 10;
+        }
+
+        return root;
+    }
+
+    static double newtonRaphson(int n) {
+//        Newton Raphson method for finding square root of a number
+        if (n <= 1) return n;
+        double x = (double) n / 2;
+        while (x * x > n) {
+            x = (x + n / x) / 2;
+        }
+        return x;
+    }
+
+    static List<Integer> factors(int n) {
+        List<Integer> factors = new ArrayList<>();
+        factors.add(1);
+        factors.add(n);
+        for (int i = 2; i <= (int) Math.sqrt(n); i++) {
+            if (n % i == 0) {
+                factors.add(i);
+                if (i != n / i)
+                    factors.add(n / i);
+            }
+        }
+        Collections.sort(factors);
+        return factors;
     }
 }

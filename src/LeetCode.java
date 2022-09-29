@@ -7,8 +7,8 @@ public class LeetCode {
 
     public static void main(String[] args) {
         int[] nums = {75, 5, -5, 75, -2, -3, 88, 10, 10, 87};
-        int target = 85;
-        System.out.println(Arrays.toString(threeSum(new int[]{-1, 0, 1, 2, -1, -4}).toArray()));
+        int target = -1;
+        System.out.println(hammingWeight(target));
     }
 
     static void swap(int[] arr, int i, int j) {
@@ -1124,29 +1124,19 @@ public class LeetCode {
         return 0;
     }
 
-    /*LeetCode: 69. Sqrt(x)*/
+    /* LeetCode: 69. Sqrt(x) */
     static int sqrt(int x) {
-        if (x == 0)
-            return 0;
-        if (x == 1)
-            return 1;
-        int start = 1, end = x / 2;
-        long square = 0;
-//        The square root i of a number x is one such that i * i = x
+        int start = 0, end = x;
         while (start <= end) {
             int mid = start + (end - start) / 2;
-            square = (long) mid * mid;
-            if (square == x)
+            long squared = (long) mid * mid;
+            if (squared == x)
                 return mid;
-            if (square > x)
-                end = mid - 1;
-            else
+            if (squared < x)
                 start = mid + 1;
+            else end = mid - 1;
         }
-        square = (long) start * start;
-        if (square > x)
-            return start - 1;
-        else return start + 1;
+        return start - 1;
     }
 
     /* LeetCode: 154. Find Minimum in Rotated Sorted Array II */
@@ -1486,7 +1476,7 @@ public class LeetCode {
     /* LeetCode: 204. Count Primes */
     static int countPrimes(int n) {
 
-//         Overall time complexity O(n)
+//         Overall time complexity O(nlog(log n))
 //         Using sieve of eratosthenes method;
         boolean[] primes = new boolean[n + 1];
         for (int i = 2; i <= (int) Math.sqrt(n); i++) {
@@ -1503,5 +1493,113 @@ public class LeetCode {
                 count++;
         }
         return count;
+    }
+
+    /* LeetCode: 367: Valid Perfect Square */
+    static boolean isPerfectSquare(int num) {
+        int start = 0, end = num;
+        while (start <= end) {
+            int mid = start + (end - start) / 2;
+            long squared = (long) mid * mid;
+            if (squared == num)
+                return true;
+            if (squared < num)
+                start = mid + 1;
+            else end = mid - 1;
+        }
+        long root = (long) (start - 1) * (start - 1);
+        return root == num;
+    }
+
+    /* LeetCode: 633. Sum of Square Numbers*/
+    static boolean judgeSquareSum(int c) {
+        int start = 0, end = (int) Math.sqrt(c);
+        while (start <= end) {
+            long squared = (long) start * start + (long) end * end;
+            if (squared == c) {
+                System.out.println("start: " + start + " end: " + end);
+                return true;
+            }
+            if (squared < c)
+                start++;
+            else end--;
+        }
+        return false;
+    }
+
+    /* LeetCode: 191. Number of 1 Bits */
+    static int hammingWeight(int n) {
+        int count = 0;
+        System.out.println(n);
+        while (n != 0) {
+            int last = n & 1;
+            if (last == 1)
+                count++;
+            n = n >>> 1;
+        }
+        return count;
+    }
+
+    /* LeetCode: 338. Counting Bits */
+    static int[] countBits(int n) {
+        int[] ans = new int[n + 1];
+
+//        Recursive method
+        for (int i = 0; i <= n; i++) {
+            ans[i] = solve(i);
+        }
+
+//        Bit Manipulation method
+//        ans[0] = 0;
+//        for (int i = 1; i < ans.length; i++) {
+//            int count = 0, current = i;
+//            while (current != 0) {
+//                int last = current & 1;
+//                if (last == 1)
+//                    count++;
+//                current = current >> 1;
+//            }
+//            ans[i] = count;
+//        }
+        return ans;
+    }
+
+    static int solve(int n) {
+        if (n == 0) return 0;
+        if (n == 1) return 1;
+
+        if (n % 2 == 0) return solve(n / 2); // handling even case
+        else return 1 + solve(n / 2); // handling odd case
+    }
+
+    /* LeetCode: 137. Single Number II */
+    static int singleNumberII(int[] nums) {
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int num : nums)
+            map.put(num, map.getOrDefault(num, 0) + 1);
+        for (int num : nums) {
+            if (map.get(num) == 1)
+                return num;
+        }
+        return -1;
+    }
+
+    /* LeetCode: 1492. The kth Factor of n */
+    static int kthFactor(int n, int k) {
+//         First for loop to check all factors before sqrt(n)
+        for (int i = 1; i < (int) Math.sqrt(n); i++) {
+            /* This works because once the first condition doesn't pass, k doesn't get decremented.
+             * Each time the first condition passes, this shows that have either found the kth factor
+             * of n or we're one step closer to finding it.*/
+            if (n % i == 0 && --k == 0)
+                return i;
+        }
+//         Second for loop to check all factors after sqrt(n) including sqrt(n) and n
+        for (int i = (int) Math.sqrt(n); i <= n; i++) {
+//            The explanation for this is the same as above
+            if (n % i == 0 && --k == 0)
+                return i;
+        }
+        return -1;
     }
 }
