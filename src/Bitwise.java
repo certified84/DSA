@@ -76,6 +76,8 @@ public class Bitwise {
         return count;
     }
 
+//    Will work for all even cases i.e. where all numbers except the single
+//    number appears even times since they will cancel out each other
     static int singleNumber(int[] nums) {
 //        Optimized using bit manipulation (XOR) with
 //        O(n) time complexity and O(1) space complexity
@@ -86,8 +88,27 @@ public class Bitwise {
 //        next time it encounters the same element, it does the opposite
 //        of the previous time. E.g. 4 ^ 1 gives 5 and 5 ^ 1 gives 4.
 //        Hence, it simulates ignoring duplicates.
-        for (int i = 0; i < nums.length; i++) {
-            single ^= nums[i];
+        for (int num : nums) {
+            single ^= num;
+        }
+        return single;
+    }
+
+    //    Will work for all even cases i.e. where all numbers except the single
+    //    number appears odd times since they will cancel out each other
+//    TODO
+    static int singleNumberII(int[] nums) {
+//        Optimized using bit manipulation (XOR) with
+//        O(n) time complexity and O(1) space complexity
+        int single = 0;
+//        What I think the XOR does is that it kinda sums the
+//        elements. When it encounters an element for the first
+//        time, it either gets increased or decreased by it. The
+//        next time it encounters the same element, it does the opposite
+//        of the previous time. E.g. 4 ^ 1 gives 5 and 5 ^ 1 gives 4.
+//        Hence, it simulates ignoring duplicates.
+        for (int num : nums) {
+            single ^= num;
         }
         return single;
     }

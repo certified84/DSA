@@ -6,9 +6,9 @@ import java.util.stream.IntStream;
 public class LeetCode {
 
     public static void main(String[] args) {
-        int[] nums = {75, 5, -5, 75, -2, -3, 88, 10, 10, 87};
+        int[] nums = {-1, 0, 1, 2, -1, -4, -2, -3, 3, 0, 4};
         int target = -1;
-        System.out.println(hammingWeight(target));
+        System.out.println(threeSum(nums));
     }
 
     static void swap(int[] arr, int i, int j) {
@@ -1451,22 +1451,33 @@ public class LeetCode {
 
     /* LeetCode: 15. 3Sum */
     static List<List<Integer>> threeSum(int[] nums) {
-
+//        TIme complexity O(nlogn) (sorting) + O(n^2) (finding numbers) = O(n^2)
+//        For optimization, first sort the input array
+        Arrays.sort(nums);
         List<List<Integer>> result = new ArrayList<>();
-        Map<Integer, Integer> map = new HashMap<>();
-
+//        The outer loop holds the first value in the 3 sum.
         for (int i = 0; i < nums.length; i++) {
-            for (int j = i + 1; j < nums.length; j++) {
-                int expected = -nums[i] - nums[j];
-                if (map.containsKey(expected) && expected != nums[i] && expected != nums[j]) {
-                    List<Integer> list = new ArrayList<>();
-                    list.add(nums[j]);
-                    list.add(nums[i]);
-                    list.add(expected);
-                    result.add(list);
-                } else {
-                    map.put(nums[j], j);
-//                    map.put(nums[i], i);
+//            This check helps us ignore duplicates. Since the array is sorted,
+//            it is safe to assume that all the possible combinations for the
+//            current number has been computed if it is the same as the previous.
+            if (i > 0 && nums[i] == nums[i - 1]) continue;
+//            Since the array is sorted, we can apply two sum II's approach to
+//            find the remaining numbers that sums to zero when combined with nums[i]
+            int start = i + 1, end = nums.length - 1;
+            while (start < end) {
+                int number = nums[i] + nums[start] + nums[end];
+                if (number > 0) end--;
+                else if (number < 0) start++;
+                else {
+                    /* This part of the solution seems to be the most complicated.
+                    * After adding the list to our result, how do we update our pointers?
+                    * We could do this by simply updating both pointers but remember
+                    * that the input array contains duplicates, and we might not get
+                    * the correct solution. The best way to this is by adding a new loop
+                    * that checks if the element at the current start position isn't the
+                    * same with the previous. If it is, increment the start/left pointer.*/
+                    result.add(Arrays.asList(nums[i], nums[start++], nums[end]));
+                    while (nums[start] == nums[start - 1] && start < end) start++;
                 }
             }
         }
@@ -1578,7 +1589,7 @@ public class LeetCode {
         for (int num : nums)
             map.put(num, map.getOrDefault(num, 0) + 1);
         for (int num : nums) {
-            if (map.get(num) == 1)
+            if (map.get(num) == 0)
                 return num;
         }
         return -1;
