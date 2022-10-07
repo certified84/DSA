@@ -726,16 +726,14 @@ public class Practice {
 
     static List<Integer> factors(int n) {
         List<Integer> factors = new ArrayList<>();
-        factors.add(1);
-        factors.add(n);
-        for (int i = 2; i <= (int) Math.sqrt(n); i++) {
-            if (n % i == 0) {
+        for (int i = 1; i < (int) Math.sqrt(n); i++) {
+            if (n % i == 0)
                 factors.add(i);
-                if (i != n / i)
-                    factors.add(n / i);
-            }
         }
-        Collections.sort(factors);
+        for (int i = (int) Math.sqrt(n); i <= n; i++) {
+            if (n % i == 0)
+                factors.add(i);
+        }
         return factors;
     }
 }

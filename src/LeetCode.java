@@ -6,9 +6,9 @@ import java.util.stream.IntStream;
 public class LeetCode {
 
     public static void main(String[] args) {
-        int[] nums = {-1, 0, 1, 2, -1, -4, -2, -3, 3, 0, 4};
+        int[] nums = {17, 18, 5, 4, 6, 1};
         int target = -1;
-        System.out.println(threeSum(nums));
+        System.out.println(minimumDifference(new int[]{9, 4, 1, 7}, 2));
     }
 
     static void swap(int[] arr, int i, int j) {
@@ -1470,12 +1470,12 @@ public class LeetCode {
                 else if (number < 0) start++;
                 else {
                     /* This part of the solution seems to be the most complicated.
-                    * After adding the list to our result, how do we update our pointers?
-                    * We could do this by simply updating both pointers but remember
-                    * that the input array contains duplicates, and we might not get
-                    * the correct solution. The best way to this is by adding a new loop
-                    * that checks if the element at the current start position isn't the
-                    * same with the previous. If it is, increment the start/left pointer.*/
+                     * After adding the list to our result, how do we update our pointers?
+                     * We could do this by simply updating both pointers but remember
+                     * that the input array contains duplicates, and we might not get
+                     * the correct solution. The best way to this is by adding a new loop
+                     * that checks if the element at the current start position isn't the
+                     * same with the previous. If it is, increment the start/left pointer.*/
                     result.add(Arrays.asList(nums[i], nums[start++], nums[end]));
                     while (nums[start] == nums[start - 1] && start < end) start++;
                 }
@@ -1509,17 +1509,18 @@ public class LeetCode {
     /* LeetCode: 367: Valid Perfect Square */
     static boolean isPerfectSquare(int num) {
         int start = 0, end = num;
+        long squared = 0;
         while (start <= end) {
             int mid = start + (end - start) / 2;
-            long squared = (long) mid * mid;
+            squared = (long) mid * mid;
             if (squared == num)
                 return true;
             if (squared < num)
                 start = mid + 1;
             else end = mid - 1;
         }
-        long root = (long) (start - 1) * (start - 1);
-        return root == num;
+        squared = (long) (start - 1) * (start - 1);
+        return squared == num;
     }
 
     /* LeetCode: 633. Sum of Square Numbers*/
@@ -1612,5 +1613,196 @@ public class LeetCode {
                 return i;
         }
         return -1;
+    }
+
+    /* LeetCode: 374. Guess Number Higher or Lower */
+    static int guessNumber(int n) {
+
+        int number = -1, start = 0, end = n;
+
+        while (start <= end) {
+            int mid = start + ((end - start) / 2);
+            int guess = guess(mid, n);
+
+            if (guess == -1) {
+                end = mid - 1;
+                continue;
+            }
+
+            if (guess == 1) {
+                start = mid + 1;
+                continue;
+            }
+
+            if (guess == 0) {
+                number = mid;
+                break;
+            }
+        }
+        return number;
+    }
+
+    static int guess(int num, int n) {
+        Random rand = new Random();
+        int guess = rand.nextInt(n);
+        System.out.println(guess);
+        return Integer.compare(num, guess);
+    }
+
+    /* LeetCode: 977. Squares of a Sorted Array */
+    static int[] sortedSquares(int[] nums) {
+
+//        Two pointer method. TIme complexity 0(n)
+        /* Algorithm:
+         * 1. Create an empty array same size as the input array.
+         * 2. Create two pointer variable one pointing to the left (0) and
+         * the other pointing to the right (nums.length - 1) of the input array
+         * 3. Create another variable i to hold the current position to input
+         * an element into our resulting array. i = nums.length - 1 first time.
+         * 4. This is the most important step. Loop through the input
+         * array, compare the squared of the elements nums[start] and nums[end].
+         * If the absolute value of nuns[start] > that of nums[end] set ans[i]
+         * to the squared of nums[start] and increment start else ans[i] =
+         * squared of nums[end]. Decrement i after every iteration. */
+
+        int[] ans = new int[nums.length];
+        int start = 0, end = nums.length - 1, i = nums.length - 1;
+        while (start <= end) {
+            if (Math.abs(nums[start]) > Math.abs(nums[end])) {
+                ans[i] = nums[start] * nums[start];
+                start++;
+                i--;
+                continue;
+            }
+            ans[i] = nums[end] * nums[end];
+            i--;
+            end--;
+        }
+        return ans;
+    }
+
+    /* LeetCode: 88. Merge Sorted Array */
+    static void merge(int[] nums1, int m, int[] nums2, int n) {
+        /* The best approach to solve this problem without extra space
+         * involves using three pointers (two of which are already provided;
+         * m and n). Since we know that only the last n part of nums1 isn't
+         * filled, we can easily start sorting from the end (m + n) of nums1.
+         * Algorithm:
+         * 1. Create a new pointer (last) indicating the position of nums1
+         * to be filled/updated. At the beginning, last = m + n - 1
+         * 2. Loop through the input arrays, fill/update nums1 and the
+         * pointers based on certain conditions. Make sure m & n > 0 to
+         * prevent index out of bound exception. When num1[m - 1] >
+         * nums2[n - 1], set nums1[last] to nums1[m - 1] and decrement m
+         * else, set nums1[last] to nums2[n - 1] and decrement n.
+         * 3. In the end, some elements might remain in nums2. Copy them
+         * into nums1 */
+        int last = m + n - 1;
+        while (m > 0 && n > 0) {
+            if (nums1[m - 1] > nums2[n - 1])
+                nums1[last] = nums1[--m];
+            else
+                nums1[last] = nums2[--n];
+            last--;
+        }
+        while (n > 0)
+            nums1[last--] = nums2[--n];
+        System.out.println(Arrays.toString(nums1));
+    }
+
+    /* LeetCode: 1299. Replace Elements with Greatest Element on Right Side */
+    static int[] replaceElements(int[] arr) {
+
+//        Time complexity: O(n), Space Complexity: O(1)
+
+        /* The simplest solution would be to use nested for loops
+         * which runs in O(n^2). We can optimize this by using a
+         * single for loop and iterating from the end instead.
+         * We start by setting arr[arr.length - 1] or the last element
+         * to -1. The next element would be the greatest between the
+         * previous element and the current greatest.*/
+
+//        Base case since we know the last element should be -1;
+        int greatest = -1;
+        for (int i = arr.length - 1; i >= 0; i--) {
+//            Variable to hold the value of arr[i] because we would
+//            be updating it.
+            int temp = arr[i];
+            arr[i] = greatest;
+//            After setting arr[i] to the current greatest element,
+//            compute the greatest by comparing the current greatest
+//            with the initial value of arr[i] before it was updated.
+            greatest = Math.max(greatest, temp);
+        }
+        return arr;
+    }
+
+    /* LeetCode: 392. Is Subsequence */
+    static boolean isSubsequence(String s, String t) {
+        int first = 0, second = 0;
+        while (first < s.length() && second < t.length()) {
+            if (s.charAt(first) == t.charAt(second))
+                first++;
+            second++;
+        }
+        return first == s.length();
+    }
+
+    /* LeetCode: 680. Valid Palindrome II */
+    static boolean validPalindrome(String s) {
+//        TIme complexity O(n) but gets TLE for very long strings
+        /* StringBuilder builder = new StringBuilder(s);
+        for (int i = 0; i < builder.length(); i++) {
+            builder.replace(i, i + 1, "");
+            if (builder.toString().equals(builder.reverse().toString()))
+                return true;
+            else
+                builder = new StringBuilder(s);
+        } */
+
+        /* The problem says return true if the string s is a palindrome after
+         * deleting at most one element meaning you could also not delete any
+         * element. We can easily achieve this using two pointer. With each
+         * iteration, we check if s.charAt(start) == s.charAt(end). If the
+         * aren't, we check if the string is a palindrome after removing
+         * s.charAt(start) or s.charAt(end).
+         * Time complexity: */
+        int start = 0, end = s.length() - 1;
+        if (isPalindrome(s, start, end))
+            return true;
+        while (start < end) {
+            if (s.charAt(start) != s.charAt(end)) {
+                return isPalindrome(s, start + 1, end) || isPalindrome(s, start, end - 1);
+            }
+            start++;
+            end--;
+        }
+        return false;
+    }
+
+    static boolean isPalindrome(String s, int start, int end) {
+        while (start <= end) {
+            if (s.charAt(start) != s.charAt(end))
+                return false;
+            start++;
+            end--;
+        }
+        return true;
+    }
+
+    /* LeetCode: 1984. Minimum Difference Between Highest and Lowest of K Scores */
+    static int minimumDifference(int[] nums, int k) {
+        /* This problem is a sliding window problem. First, we sort the array.
+         * Then, we create a window of size k and compute the difference between
+         * the first and last element of the window. We then slide the window
+         * by one element and repeat the process. The minimum difference is the
+         * answer. */
+        Arrays.sort(nums);
+        int minimumDifference = Integer.MAX_VALUE;
+        int start = 0, end = k - 1;
+        while (end < nums.length) {
+            minimumDifference = Math.min(minimumDifference, nums[end++] - nums[start++]);
+        }
+        return minimumDifference;
     }
 }
