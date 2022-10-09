@@ -8,7 +8,7 @@ public class LeetCode {
     public static void main(String[] args) {
         int[] nums = {17, 18, 5, 4, 6, 1};
         int target = -1;
-        System.out.println(minimumDifference(new int[]{9, 4, 1, 7}, 2));
+        System.out.println(romanToInt("MMMMCMXCIX"));
     }
 
     static void swap(int[] arr, int i, int j) {
@@ -1804,5 +1804,97 @@ public class LeetCode {
             minimumDifference = Math.min(minimumDifference, nums[end++] - nums[start++]);
         }
         return minimumDifference;
+    }
+
+    //    LeetCode: 219. Contains Duplicate II
+    static boolean containsNearbyDuplicate(int[] nums, int k) {
+        /* Map.put() function returns the previous value associated with key,
+         * or null if there was no mapping for key.  A null return can also
+         * indicate that the map previously associated null with key, if the
+         * implementation supports null values. In our case, the put() function
+         * only returns null if it is the first time we encounter the element.*/
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int i = 0; i < nums.length; i++) {
+            Integer initial = map.put(nums[i], i);
+            if (initial != null && i - initial <= k)
+                return true;
+        }
+        return false;
+    }
+
+    /* LeetCode: 13. Roman to Integer */
+    static int romanToInt(String s) {
+        int sum = 0;
+        /*for (int i = 0; i < s.length(); i++) {
+            switch (s.charAt(i)) {
+
+                case 'I':
+                    if (i <= s.length() - 2) {
+                        if (s.charAt(i + 1) == 'V') {
+                            sum += 4;
+                            ++i;
+                        } else if (s.charAt(i + 1) == 'X') {
+                            sum += 9;
+                            ++i;
+                        } else sum += 1;
+                    } else sum += 1;
+                    break;
+
+                case 'X':
+                    if (i <= s.length() - 2) {
+                        if (s.charAt(i + 1) == 'L') {
+                            sum += 40;
+                            ++i;
+                        } else if (s.charAt(i + 1) == 'C') {
+                            sum += 90;
+                            ++i;
+                        } else sum += 10;
+                    } else sum += 10;
+                    break;
+
+                case 'C':
+                    if (i <= s.length() - 2) {
+                        if (s.charAt(i + 1) == 'D') {
+                            sum += 400;
+                            ++i;
+                        } else if (s.charAt(i + 1) == 'M') {
+                            sum += 900;
+                            ++i;
+                        } else sum += 100;
+                    } else sum += 100;
+                    break;
+
+                case 'V':
+                    sum += 5;
+                    break;
+                case 'L':
+                    sum += 50;
+                    break;
+                case 'D':
+                    sum += 500;
+                    break;
+                case 'M':
+                    sum += 1000;
+                    break;
+                default:
+                    sum += 0;
+            }
+        }*/
+//         Using a hashmap
+        Map<Character, Integer> map = new HashMap<>();
+        map.put('I', 1);
+        map.put('V', 5);
+        map.put('X', 10);
+        map.put('L', 50);
+        map.put('C', 100);
+        map.put('D', 500);
+        map.put('M', 1000);
+        System.out.println(s);
+        for (int i = 0; i < s.length(); i++) {
+            if (i + 1 < s.length() && map.get(s.charAt(i)) < map.get(s.charAt(i + 1)))
+                sum -= map.get(s.charAt(i));
+            else sum += map.get(s.charAt(i));
+        }
+        return sum;
     }
 }
