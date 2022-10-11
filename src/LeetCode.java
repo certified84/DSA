@@ -7,8 +7,8 @@ public class LeetCode {
 
     public static void main(String[] args) {
         int[] nums = {17, 18, 5, 4, 6, 1};
-        int target = -1;
-        System.out.println(romanToInt("MMMMCMXCIX"));
+        int target = 12;
+        System.out.println(checkPowersOfThree(target));
     }
 
     static void swap(int[] arr, int i, int j) {
@@ -240,6 +240,17 @@ public class LeetCode {
 
         int start = 0;
         int end = numbers.length - 1;
+
+//        Arrays.sort(numbers);
+//        int start = 0, end = numbers.length - 1;
+//        while (start < end) {
+//            int currentSum = numbers[start] + numbers[end];
+//            if (currentSum == target) {
+//                return new int[]{numbers[start], numbers[end]};
+//            } else if (currentSum > target) end--;
+//            else start++;
+//        }
+//        return new int[]{};
 
 //        While loop because we don't know the number of iterations
         while (start < end) {
@@ -891,37 +902,12 @@ public class LeetCode {
 //        return i;
 //    }
 
-    /*LeetCode: 628. Maximum Product of Three Numbers */
+    /* LeetCode: 628. Maximum Product of Three Numbers */
     static int maximumProduct(int[] arr) {
-//         Using insertion sort
-//        External loop handles the sorting
-        for (int i = arr.length - 1; i >= 0; i--) {
-//        This variable keeps track of the current largest element
-            int largest = 0;
-//            Internal loop handles finding the largest element
-            for (int j = 0; j <= i; j++) {
-                if (Math.abs(arr[j]) > Math.abs(arr[largest])) {
-                    largest = j;
-                }
-            }
-//            If i == largest, that means arr[i] is already sorted
-            if (i == largest)
-                continue;
-//            Swap the largest element to its correct position.
-            int temp = arr[i];
-            arr[i] = arr[largest];
-            arr[largest] = temp;
-        }
-
-        System.out.println(Arrays.toString(arr));
-
+        Arrays.sort(arr);
         int maxProduct = 1;
-        int count = 0;
-        int k = arr.length - 1;
-        while (count < 3 && k >= 0) {
-            maxProduct *= arr[k];
-            k--;
-            count++;
+        for (int i = arr.length - 1; i >= arr.length - 3; i--) {
+            maxProduct *= arr[i];
         }
         return maxProduct;
     }
@@ -1896,5 +1882,59 @@ public class LeetCode {
             else sum += map.get(s.charAt(i));
         }
         return sum;
+    }
+
+    /* LeetCode: 202. Happy Number*/
+    static boolean isHappy(int n) {
+
+        if (n == 1 || n == 7)
+            return true;
+
+        if (n <= 9)
+            return false;
+
+        return isHappy(sumOfSquares(n));
+    }
+
+    static int sumOfSquares(int n) {
+        int sum = 0;
+        while (n > 0) {
+            sum += Math.pow(n % 10, 2);
+            n /= 10;
+        }
+        return sum;
+    }
+
+    /* LeetCode: 342. Power of Four, 326. Power of Three,  */
+    static boolean isPowerOfFour(int n) {
+        if (n == 1)
+            return true;
+        if (n <= 0 || n % 4 != 0)
+            return false;
+        return isPowerOfFour(n / 4);
+    }
+
+    /* LeetCode: 168. Excel Sheet Column Title*/
+    static String convertToTitle(int columnNumber) {
+        StringBuilder sb = new StringBuilder();
+        while (columnNumber > 0) {
+            columnNumber--;
+            int curr = columnNumber % 26;
+            columnNumber /= 26;
+            sb.append((char) (curr + 'A'));
+        }
+        return sb.reverse().toString();
+    }
+
+    /* LeetCode: 1780. Check if Number is a Sum of Powers of Three */
+    static boolean checkPowersOfThree(int n) {
+//        while (n > 0) {
+//            int last = n % 10;
+//            if (!isPowerOfThree(last))
+//                return false;
+//            n /= 10;
+//        }
+        // TODO: 11/10/2022  
+        return true;
     }
 }
