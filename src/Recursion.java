@@ -3,9 +3,10 @@ public class Recursion {
 //        System.out.println(fibo(6));
         int[] arr = {-5, -3, -2, -2, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
         int target = -4;
-        for (int i = 0; i <= 10; i++) {
-            System.out.println("Fibonacci number of " + i + " is " + fibonacciFormula(i));
-        }
+//        for (int i = 0; i <= 10; i++) {
+//            System.out.println("Fibonacci number of " + i + " is " + fibonacciFormula(i));
+//        }
+        System.out.println(fibo(6));
     }
 
     static void print(int start, int end) {

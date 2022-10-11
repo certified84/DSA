@@ -5,13 +5,25 @@ import java.util.*;
 
 public class Practice {
     public static void main(String[] args) {
-        int n = 12;
+        CustomLinkedList<Integer> list = new CustomLinkedList<>();
+        list.insert(7, 0);
+        list.insert(6, 0);
+        list.insert(5, 0);
+        list.insert(4, 0);
+        list.insert(3, 0);
+//        list.insert(8, 5);
+//        list.delete(1);
+        System.out.println(list);
+//        System.out.println("Head: " + list.head());
+//        System.out.println("Tail: " + list.tail());
+        System.out.println(list.find(6));
+
     }
 
     static String primeTime(int num) {
         // code goes here
 
-        // Overal time complexity: O(sqrt(num))
+        // Overall time complexity: O(sqrt(num))
 
         if (num <= 2)
             return "true";
@@ -177,7 +189,6 @@ public class Practice {
             for (int j = i + 1; j < arr.length; j++) {
                 int expected = arr[0] - current - arr[j];
                 if (!map.containsKey(expected)) {
-//                    map.put(arr[i], i);
                     map.put(arr[j], j);
                 } else return true;
             }
@@ -735,5 +746,161 @@ public class Practice {
                 factors.add(i);
         }
         return factors;
+    }
+
+    /* RemoteBase Hackerrank test */
+    static int maxDifference(List<Integer> px) {
+        int maxDifference = -1, start = 0, end = 1;
+//        for (int i = 0; i < px.size(); i++) {
+//            for (int j = i + 1; j < px.size(); j++) {
+//                int diff = px.get(j) - px.get(i);
+//                maxDifference = Math.max(maxDifference, diff);
+//            }
+//        }
+        while (end < px.size()) {
+            int difference = px.get(end) - px.get(start);
+            if (px.get(start) < px.get(end))
+                maxDifference = Math.max(maxDifference, difference);
+            else
+                start = end;
+            end++;
+        }
+        return maxDifference;
+    }
+
+    static String mergePalindromes(String s1, String s2) {
+        s1 = buildPalindrome(s1);
+        System.out.println(s1);
+        s2 = buildPalindrome(s2);
+        System.out.println(s2);
+        return buildPalindrome(s1 + s2);
+    }
+
+    static String buildPalindrome(String s) {
+        StringBuilder builder = new StringBuilder(s);
+        int start = 0, end = s.length() - 1;
+        Map<Integer, Character> map = new HashMap<>();
+        for (int i = 0; i < s.length(); i++) {
+            for (int j = i + 1; j < s.length(); j++) {
+                if (s.charAt(i) == s.charAt(j) && !map.containsKey(j) && !map.containsKey(i)) {
+                    builder.replace(start, start + 1, String.valueOf(s.charAt(i)));
+                    builder.replace(end, end + 1, String.valueOf(s.charAt(j)));
+                    end--;
+                    start++;
+                    map.put(i, s.charAt(i));
+                    map.put(j, s.charAt(j));
+                    break;
+                }
+            }
+        }
+        return builder.toString();
+    }
+
+    static String armstrongNumber(int n) {
+        // code here
+        int temp = n, sum = 0;
+        while (temp > 0) {
+            int digit = temp % 10;
+            sum += Math.pow(digit, 3);
+            temp /= 10;
+        }
+        return sum == n ? "Yes" : "No";
+    }
+
+    static long factorial(int N) {
+        // code here
+        if (N == 0 || N == 1)
+            return 1;
+        return N * factorial(N - 1);
+    }
+
+    /* AlgoExpert Three Number Sum */
+    static List<Integer[]> threeNumberSum(int[] array, int targetSum) {
+        Arrays.sort(array);
+        List<Integer[]> ans = new ArrayList<>();
+        for (int i = 0; i < array.length; i++) {
+            int start = i + 1, end = array.length - 1;
+            while (start < end) {
+                int currentSum = array[i] + array[start] + array[end];
+                if (currentSum == targetSum) {
+                    Integer[] nums = new Integer[]{array[i], array[start], array[end]};
+                    ans.add(nums);
+                    start++;
+                    end--;
+                } else if (currentSum > targetSum) end--;
+                else start++;
+            }
+        }
+        return ans;
+    }
+
+    /* AlgoExpert Tournament Winner */
+    static String tournamentWinner(
+            ArrayList<ArrayList<String>> competitions, ArrayList<Integer> results) {
+
+        /* Problem says find the tournament winner
+         * For every competition, there can either be a winner or loser.
+         * A winner has 3 points per win and a loser 0 points.
+         * The competitions are a list of competition. With each competition,
+         * one team is at home and the other is away.
+         * The results are a list of result corresponding to each competition
+         * When result[i] == 1, that means the home team wins where home team
+         * == competitions[i][0]. When result[i] == 0, that means the away team
+         * wins where away team == competitions[i][0]
+         * We can easily find the winner of the competition by putting each team
+         * and their corresponding scores in a HashMap. Then find the team with
+         * the highest score in the HashMap.*/
+
+        // Write your code here.
+        Map<String, Integer> map = new HashMap<>();
+        for (int i = 0; i < results.size(); i++) {
+
+            String homeTeam = competitions.get(i).get(0);
+            String awayTeam = competitions.get(i).get(1);
+
+            if (results.get(i) == 1) {
+                map.put(homeTeam, map.getOrDefault(homeTeam, 0) + 3);
+                map.put(awayTeam, map.getOrDefault(awayTeam, 0));
+            } else {
+                map.put(awayTeam, map.getOrDefault(awayTeam, 0) + 3);
+                map.put(homeTeam, map.getOrDefault(homeTeam, 0));
+            }
+        }
+        String winner = competitions.get(0).get(0);
+        for (String key : map.keySet()) {
+            if (map.get(key) > map.get(winner))
+                winner = key;
+        }
+        return winner;
+    }
+
+    /* AlgoExpert First Duplicate Value */
+    static int firstDuplicateValue(int[] array) {
+        // Write your code here.
+//        Using HashSet
+         Set<Integer> set = new HashSet<>();
+        for (int num : array) {
+//            The Set.add() method returns true if the element was
+//            successfully added else false. It returns false when
+//            the set already contains the given element.
+            if(!set.add(num))
+                return num;
+        }
+//        Using Cyclic sort
+        int i = 0;
+//        while (i < array.length) {
+//            int correctIndex = array[i] - 1;
+//            if (array[i] != i + 1) {
+//                int temp = array[i];
+//                array[i] = array[correctIndex];
+//                array[correctIndex] = temp;
+//            }
+//            i++;
+//        }
+//        for (i = 0; i < array.length; i++) {
+//            if (array[i] != i + 1)
+//                return array[i];
+//        }
+        return -1;
     }
 }

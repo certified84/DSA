@@ -1,0 +1,149 @@
+public class CustomLinkedList<T> {
+
+    private Node<T> head;
+    private Node<T> tail;
+    private int size;
+
+    public CustomLinkedList() {
+        this.size = 0;
+    }
+
+    public int size() {
+        return size;
+    }
+
+    public Node<T> head() {
+        return this.head;
+    }
+
+    public Node<T> tail() {
+        return this.tail;
+    }
+
+    public Node<T> get(int position) {
+        if (position < 0 || position >= size)
+            return null;
+        Node<T> node = head;
+        int count = 0;
+        while (count < size) {
+            if (count == position)
+                return node;
+            node = node.next;
+            count++;
+        }
+        return node;
+    }
+
+    public void insert(T value, int position) {
+        if (position == 0) {
+            insertHead(value);
+            return;
+        } else if (position < 0 || position >= size) {
+            System.out.println("Index is out of bound");
+            return;
+        } else {
+            Node<T> node = head;
+            int count = 0;
+            while (count < position) {
+                if (count == position - 1) {
+                    node.next = new Node<T>(value, node.next);
+                }
+                node = node.next;
+                count++;
+            }
+        }
+        size++;
+    }
+
+    private void insertHead(T value) {
+        Node<T> node = new Node<>();
+        node.value = value;
+        node.next = head;
+        head = node;
+        if (tail == null)
+            tail = node;
+        size++;
+    }
+
+    private void insertTail(T value) {
+        Node<T> node = new Node<>();
+        node.value = value;
+        tail.next = node;
+        tail = node;
+        size++;
+    }
+
+    public void delete(int position) {
+        if (position >= size) {
+            System.out.println("Index out of bound");
+            return;
+        } else if (position == 0) {
+            deleteHead();
+            return;
+        } else {
+            Node<T> node = get(position);
+            Node<T> temp = get(position - 1);
+            temp.next = node.next;
+            node.next = null;
+            if (position == size - 1)
+                tail = temp;
+        }
+        size--;
+    }
+
+    private void deleteHead() {
+        head = head.next;
+        if (head == null)
+            tail = null;
+        size--;
+    }
+
+    public Node<T> find(T value) {
+        Node<T> node = head;
+        while (node != null) {
+            if (node.value == value)
+                return node;
+            node = node.next;
+        }
+        return null;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        Node<T> temp = head;
+        while (temp != null) {
+            builder.append(temp.value).append(" -> ");
+            temp = temp.next;
+        }
+        builder.append("END");
+        return builder.toString();
+    }
+
+    private class Node<E> {
+        private E value;
+        private Node<E> next;
+
+        public Node() {
+
+        }
+
+        public Node(E value) {
+            this.value = value;
+        }
+
+        public Node(E value, Node<E> next) {
+            this.value = value;
+            this.next = next;
+        }
+
+        @Override
+        public String toString() {
+            String next;
+            if (this.next == null)
+                next = null;
+            else next = String.valueOf(this.next.value);
+            return "Value: " + value + " Next: " + next;
+        }
+    }
+}
