@@ -6,9 +6,11 @@ import java.util.stream.IntStream;
 public class LeetCode {
 
     public static void main(String[] args) {
-        int[] nums = {17, 18, 5, 4, 6, 1};
-        int target = 12;
-        System.out.println(checkPowersOfThree(target));
+        ListNode list1 = new ListNode(1, new ListNode(2, new ListNode(4)));
+        ListNode list2 = new ListNode(1, new ListNode(3, new ListNode(4)));
+        list1.next = list2;
+        list2.next = list1;
+        System.out.println(hasCycle(list1));
     }
 
     static void swap(int[] arr, int i, int j) {
@@ -1936,5 +1938,166 @@ public class LeetCode {
 //        }
         // TODO: 11/10/2022  
         return true;
+    }
+
+    /* LeetCode: 2114. Maximum Number of Words Found in Sentences */
+    static int mostWordsFound(String[] sentences) {
+        int mostWords = 0;
+        for (String sentence : sentences) {
+            String[] words = sentence.split(" ");
+            mostWords = Math.max(mostWords, words.length);
+        }
+        return mostWords;
+    }
+
+    /* LeetCode: 2047. Number of Valid Words in a Sentence */
+    static int countValidWords(String sentence) {
+        int count = 0;
+        String[] words = sentence.split(" ");
+        for (String word : words) {
+            if (isValid(word))
+                count++;
+        }
+        return count;
+    }
+
+    static boolean isValid(String word) {
+        if (word.equals(""))
+            return false;
+        Map<Character, Integer> map = new HashMap<>();
+        for (int i = 0; i < word.length(); i++) {
+
+            char current = word.charAt(i);
+            if (Character.isDigit(current))
+                return false;
+
+            else if (current == '-' && map.containsKey(current))
+                return false;
+
+            else if ((current == '!' || current == '.' || current == ',') && map.containsKey(current))
+                return false;
+
+            else map.put(current, i);
+
+        }
+
+        int hyphenPos = map.getOrDefault('-', -1);
+        if (hyphenPos < 2)
+            return false;
+
+        int exclamationPos = map.getOrDefault('!', -1);
+        int commaPos = map.getOrDefault(',', -1);
+        int periodPos = map.getOrDefault('.', -1);
+        return exclamationPos == word.length() - 1 && commaPos == word.length() - 1 && periodPos == word.length() - 1;
+    }
+
+    /* LeetCode: 647 Palindromic Strings*/
+    static int countPalindromes(String s) {
+        int count = 0;
+        for (int i = 0; i < s.length(); i++) {
+
+            // Expanding the search in odd manner
+            int left = i, right = i;
+            while (left >= 0 && right < s.length()) {
+                if (s.charAt(left) == s.charAt(right)) {
+                    left--;
+                    right++;
+                    count++;
+                } else break;
+            }
+
+            // Expanding the search in even manner
+            left = i;
+            right = i + 1;
+            while (left >= 0 && right < s.length()) {
+                if (s.charAt(left) == s.charAt(right)) {
+                    left--;
+                    right++;
+                    count++;
+                } else break;
+            }
+        }
+        return count;
+    }
+
+    /* LeetCode: 5. Longest Palindromic Substring */
+    static String longestPalindrome(String s) {
+        String longestPalindrome = "";
+        for (int i = 0; i < s.length(); i++) {
+
+            int left = i, right = i;
+            while (left >= 0 && right < s.length() && s.charAt(left) == s.charAt(right)) {
+                String substring = s.substring(left, right + 1);
+                if (substring.length() > longestPalindrome.length())
+                    longestPalindrome = substring;
+                left--;
+                right++;
+            }
+
+            left = i;
+            right = i + 1;
+            while (left >= 0 && right < s.length() && s.charAt(left) == s.charAt(right)) {
+                String substring = s.substring(left, right + 1);
+                if (substring.length() > longestPalindrome.length())
+                    longestPalindrome = substring;
+                left--;
+                right++;
+            }
+        }
+        return longestPalindrome;
+    }
+
+    /* LeetCode: 21 Merge Two Sorted Lists */
+    static ListNode mergeTwoLists(ListNode list1, ListNode list2) {
+        ListNode head = new ListNode();
+        ListNode tail = head;
+        while (list1 != null && list2 != null) {
+            if (list1.value < list2.value) {
+                tail.next = list1;
+                list1 = list1.next;
+            } else {
+                tail.next = list2;
+                list2 = list2.next;
+            }
+            tail = tail.next;
+        }
+        tail.next = list1 == null ? list2 : list1;
+        return head.next;
+    }
+
+    /* LeetCode: 2. Add Two Numbers */
+
+    static ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+        ListNode head = new ListNode();
+        ListNode tail = head;
+        int carry = 0;
+        while (l1 != null || l2 != null) {
+            int firstSum = l1 == null ? 0 : l1.value;
+            int secondSum = l2 == null ? 0 : l2.value;
+            int sum = firstSum + secondSum + carry;
+            tail.next = new ListNode(sum % 10);
+            carry = sum / 10;
+            tail = tail.next;
+            if (l1 != null)
+                l1 = l1.next;
+            if (l2 != null)
+                l2 = l2.next;
+        }
+        if (carry != 0)
+            tail.next = new ListNode(carry);
+
+        return head.next;
+    }
+
+    /* LeetCode: 141. Linked List Cycle */
+    static boolean hasCycle(ListNode head) {
+        ListNode slow = head, fast = head;
+        while (fast != null && fast.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+            if (slow == fast)
+                return true;
+        }
+        return false;
     }
 }
