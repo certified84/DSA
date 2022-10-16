@@ -1,23 +1,10 @@
-import org.jetbrains.annotations.Contract;
-
-import java.lang.reflect.Array;
 import java.util.*;
 
 public class Practice {
     public static void main(String[] args) {
-        CustomLinkedList<Integer> list = new CustomLinkedList<>();
-        list.insert(7, 0);
-        list.insert(6, 0);
-        list.insert(5, 0);
-        list.insert(4, 0);
-        list.insert(3, 0);
-//        list.insert(8, 5);
-//        list.delete(1);
-        System.out.println(list);
-//        System.out.println("Head: " + list.head());
-//        System.out.println("Tail: " + list.tail());
-        System.out.println(list.find(6));
-
+        ListNode list1 = new ListNode(9);
+        ListNode list2 = new ListNode(1, new ListNode(9, new ListNode(9, new ListNode(9, new ListNode(9, new ListNode(9, new ListNode(9, new ListNode(9, new ListNode(9, new ListNode(9))))))))));
+        System.out.println(lengthOfCycle(list1));
     }
 
     static String primeTime(int num) {
@@ -878,29 +865,142 @@ public class Practice {
     static int firstDuplicateValue(int[] array) {
         // Write your code here.
 //        Using HashSet
-         Set<Integer> set = new HashSet<>();
-        for (int num : array) {
-//            The Set.add() method returns true if the element was
-//            successfully added else false. It returns false when
-//            the set already contains the given element.
-            if(!set.add(num))
-                return num;
-        }
+//         Set<Integer> set = new HashSet<>();
+//        for (int num : array) {
+////            The Set.add() method returns true if the element was
+////            successfully added else false. It returns false when
+////            the set already contains the given element.
+//            if(!set.add(num))
+//                return num;
+//        }
 //        Using Cyclic sort
         int i = 0;
-//        while (i < array.length) {
-//            int correctIndex = array[i] - 1;
-//            if (array[i] != i + 1) {
-//                int temp = array[i];
-//                array[i] = array[correctIndex];
-//                array[correctIndex] = temp;
+        while (i < array.length) {
+            int correctIndex = array[i] - 1;
+            if (array[i] == i + 1 && i != correctIndex) {
+                i++;
+                continue;
+            }
+//            else {
+//                if (array[correctIndex] == array[i])
+//                    return array[i];
+//                else {
+            int temp = array[i];
+            array[i] = array[correctIndex];
+            array[correctIndex] = temp;
+//                }
 //            }
 //            i++;
-//        }
+        }
+        System.out.println(Arrays.toString(array));
 //        for (i = 0; i < array.length; i++) {
 //            if (array[i] != i + 1)
 //                return array[i];
 //        }
         return -1;
+    }
+
+    //    Goldman Sachs: Hackerrank: Lottery Coupons
+    static int lotteryCoupons(int n) {
+        // Using HashMap. Time Complexity: O(n)
+        Map<Integer, Integer> map = new HashMap<>();
+        int max = 0, count = 0;
+        for (int i = 1; i <= n; i++) {
+            int num = sumDigits(i);
+            int j = map.put(num, map.getOrDefault(num, 0) + 1) == null ? 0 : map.get(num);
+            max = Math.max(max, j);
+        }
+        if (n <= 9)
+            return map.size();
+        for (int key : map.keySet()) {
+            if (map.get(key) == max)
+                count++;
+        }
+        return count;
+    }
+
+    static int sumDigits(int n) {
+        int ans = 0;
+        while (n > 0) {
+            ans += n % 10;
+            n /= 10;
+        }
+        return ans;
+    }
+
+    //    Goldman Sachs: Hackerrank: Palindrome Counter
+    static int countPalindromes(String s) {
+        int count = 0;
+        for (int i = 0; i < s.length(); i++) {
+
+            // Expanding the search in odd manner
+            int left = i, right = i;
+            while (left >= 0 && right < s.length()) {
+                if (s.charAt(left) == s.charAt(right)) {
+                    left--;
+                    right++;
+                    count++;
+                } else break;
+            }
+
+            // Expanding the search in even manner
+            left = i;
+            right = i + 1;
+            while (left >= 0 && right < s.length()) {
+                if (s.charAt(left) == s.charAt(right)) {
+                    left--;
+                    right++;
+                    count++;
+                } else break;
+            }
+        }
+        return count;
+    }
+
+    /* AlgoExpert Sum of Linked Lists. Which is basically same as LeetCode: 2. Add Two Numbers.
+     * Check LeetCode class for second and more optimized solution. */
+    static ListNode sumOfLinkedLists(ListNode linkedListOne, ListNode linkedListTwo) {
+        // Write your code here.
+        int firstSum = 0, secondSum = 0, base = 1;
+        while (linkedListOne != null) {
+            firstSum += linkedListOne.value * base;
+            base *= 10;
+            linkedListOne = linkedListOne.next;
+        }
+
+        base = 1;
+        while (linkedListTwo != null) {
+            secondSum += linkedListTwo.value * base;
+            base *= 10;
+            linkedListTwo = linkedListTwo.next;
+        }
+
+        int sum = firstSum + secondSum;
+        ListNode sumOfLinkedLists = new ListNode(sum % 10);
+        ListNode tail = sumOfLinkedLists;
+        sum /= 10;
+        while (sum != 0) {
+            tail.next = new ListNode(sum % 10);
+            sum /= 10;
+            tail = tail.next;
+        }
+        return sumOfLinkedLists;
+    }
+
+    static int lengthOfCycle(ListNode head) {
+        ListNode slow = head, fast = head;
+        while (fast != null && fast.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+            if (slow == fast) {
+                int length = 0;
+                do {
+                    slow = slow.next;
+                    length++;
+                } while (slow != fast);
+                return length;
+            }
+        }
+        return 0;
     }
 }
