@@ -1,10 +1,14 @@
+import exceptions.StackException;
+
 import java.util.*;
 
 public class Practice {
-    public static void main(String[] args) {
-        ListNode list1 = new ListNode(9);
-        ListNode list2 = new ListNode(1, new ListNode(9, new ListNode(9, new ListNode(9, new ListNode(9, new ListNode(9, new ListNode(9, new ListNode(9, new ListNode(9, new ListNode(9))))))))));
-        System.out.println(lengthOfCycle(list1));
+    public static void main(String[] args) throws StackException {
+        DynamicCustomStack<Integer> stack = new DynamicCustomStack<>(Integer.class);
+        for (int i = 0; i < 20; i++) {
+            System.out.println(stack.push(i));
+        }
+        System.out.println(lint("({[]})"));
     }
 
     static String primeTime(int num) {
@@ -154,18 +158,6 @@ public class Practice {
         if (x1 - v1 == x2 - v2)
             return "YES";
         else return "NO";
-    }
-
-
-    public void reverseString(char[] s) {
-        int start = 0, end = s.length - 1;
-        while (start <= end) {
-            char temp = s[start];
-            s[start] = s[end];
-            s[end] = temp;
-            start++;
-            end--;
-        }
     }
 
     static boolean threeSum(int[] arr) {
@@ -329,6 +321,17 @@ public class Practice {
         return builder.toString();
     }
 
+    static void balanced(String name) {
+        int lCount = 0, rCount = 0;
+        StringBuilder builder = new StringBuilder(name);
+        for (int i = 0; i < builder.length(); i++) {
+            if (builder.charAt(i) == 'L')
+                lCount++;
+            else
+                rCount++;
+        }
+    }
+
 //    static List<Integer> counts(List<Integer> teamA, List<Integer> teamB) {
 //        // Write your code here
 //        List<Integer> ans = new ArrayList<>();
@@ -353,18 +356,6 @@ public class Practice {
 //        }
 //        return ans;
 //    }
-
-
-    static void balanced(String name) {
-        int lCount = 0, rCount = 0;
-        StringBuilder builder = new StringBuilder(name);
-        for (int i = 0; i < builder.length(); i++) {
-            if (builder.charAt(i) == 'L')
-                lCount++;
-            else
-                rCount++;
-        }
-    }
 
     static List<String> commonChars(String[] words) {
         List<String> commonChars = new ArrayList<>();
@@ -547,6 +538,26 @@ public class Practice {
         return new int[]{0, 0};
     }
 
+    static boolean lint(String s) throws StackException {
+        CustomStack<Character> stack = new CustomStack<>(Character.class);
+        for (char ch : s.toCharArray()) {
+            if (ch == '(' || ch == '{' || ch == '[') {
+                stack.push(ch);
+            } else if (ch == ')') {
+                if (stack.isEmpty() || stack.pop() != '(')
+                    return false;
+            } else if (ch == ']') {
+                if (stack.isEmpty() || stack.pop() != '[')
+                    return false;
+            } else if (ch == '}') {
+                if (stack.isEmpty() || stack.pop() != '{')
+                    return false;
+            }
+        }
+        System.out.println(stack);
+        return stack.isEmpty();
+    }
+
 //    static int lengthOfLongestSubstring(String s) {
 //        Map<Character, Integer> map = new HashMap<>();
 //        StringBuilder builder = new StringBuilder();
@@ -559,22 +570,6 @@ public class Practice {
 //        }
 //        return builder.length();
 //    }
-
-    static boolean lint(String s) {
-        Stack<Character> stack = new Stack<>();
-        for (int i = 0; i < s.length(); i++) {
-            if (s.charAt(i) != '(' || s.charAt(i) != ')')
-                continue;
-            if (s.charAt(i) == '(') {
-                stack.push(s.charAt(i));
-            } else if (s.charAt(i) == ')') {
-                if (stack.peek() == '(')
-                    stack.pop();
-                else return false;
-            }
-        }
-        return true;
-    }
 
     static int pivotIndex(int[] nums) {
         int total = 0;
@@ -1002,5 +997,16 @@ public class Practice {
             }
         }
         return 0;
+    }
+
+    public void reverseString(char[] s) {
+        int start = 0, end = s.length - 1;
+        while (start <= end) {
+            char temp = s[start];
+            s[start] = s[end];
+            s[end] = temp;
+            start++;
+            end--;
+        }
     }
 }

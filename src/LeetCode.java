@@ -1738,7 +1738,7 @@ public class LeetCode {
 
     /* LeetCode: 680. Valid Palindrome II */
     static boolean validPalindrome(String s) {
-//        TIme complexity O(n) but gets TLE for very long strings
+//        Time complexity O(n) but gets TLE for very long strings
         /* StringBuilder builder = new StringBuilder(s);
         for (int i = 0; i < builder.length(); i++) {
             builder.replace(i, i + 1, "");
@@ -1754,7 +1754,7 @@ public class LeetCode {
          * iteration, we check if s.charAt(start) == s.charAt(end). If the
          * aren't, we check if the string is a palindrome after removing
          * s.charAt(start) or s.charAt(end).
-         * Time complexity: */
+         * Time complexity: O(n^2) */
         int start = 0, end = s.length() - 1;
         if (isPalindrome(s, start, end))
             return true;
@@ -2091,6 +2091,32 @@ public class LeetCode {
 
     /* LeetCode: 141. Linked List Cycle */
     static boolean hasCycle(ListNode head) {
+        /* Brute force: O(n) time and space complexity using
+         * HashSet. TIme complexity is O(n) because we are traversing
+         * the list once. And space complexity is O(n) because
+         * we are using a HashSet to store all the nodes.
+         * Of course, a set can be of any type. The Set.add()
+         * method returns true if the given element is added to
+         * the set and returns false if the set already contains
+         * the element. We can use this feature to detect a cycle
+         * in a LinkedList. */
+//        ListNode temp = head;
+//        Set<ListNode> set = new HashSet<>();
+//        while (temp != null) {
+//            if(!set.add(temp))
+//                return true;
+//            temp = temp.next;
+//        }
+//        return false;
+
+        /* A more optimized way to detect a cycle in a LinkedList is by
+        * using Floyd's Cycle Detection Algorithm also called Tortoise and
+        * Hare with O(n) time complexity and O(1) space complexity.
+        * This algorithm makes use of a slow (tortoise) and fast (hare)
+        * pointer. With every iteration, we move the slow pointer once and
+        * the fast pointer twice. If there is a cycle, both pointers will
+        * point to the same node at some point. And if there isn't, the fast
+        * pointer will eventually be null.*/
         ListNode slow = head, fast = head;
         while (fast != null && fast.next != null) {
             slow = slow.next;
@@ -2099,5 +2125,49 @@ public class LeetCode {
                 return true;
         }
         return false;
+    }
+
+    /* LeetCode: 142. Linked List Cycle II */
+    static ListNode detectCycle(ListNode head) {
+        /* Brute force: O(n) time and space complexity using
+         * HashSet. Time complexity is O(n) because we are traversing
+         * the list once. And space complexity is O(n) because
+         * we are using a HashSet to store all the nodes.
+         * Of course, a set can be of any type. The Set.add()
+         * method returns true if the given element is added to
+         * the set and returns false if the set already contains
+         * the element. We can use this feature to find the entry point
+         * of the cycle in a LinkedList. */
+//        ListNode temp = head;
+//        Set<ListNode> set = new HashSet<>();
+//        while (temp != null) {
+//            if(!set.add(temp))
+//                return temp;
+//            temp = temp.next;
+//        }
+//        return null;
+
+        /* Like the hasCycle problem, we can also optimize the solution
+        * using Floyd's detection algorithm. We all ready know how to
+        * detect a cycle using the slow and fast pointer. After detecting
+        * the cycle, the next step is to find the entry point of the cycle.
+        * To do this, we set either the slow or fast pointer to the head
+        * leaving the other at the meeting point then move both pointers
+        * once per iteration. The node at with both pointers meet is the
+        * entry point of the cycle.*/
+        ListNode slow = head, fast = head;
+        while (fast != null && fast.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+            if (slow == fast) {
+                slow = head;
+                while (slow != fast) {
+                    slow = slow.next;
+                    fast = fast.next;
+                }
+                return slow;
+            }
+        }
+        return null;
     }
 }
