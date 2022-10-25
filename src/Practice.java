@@ -4,11 +4,25 @@ import java.util.*;
 
 public class Practice {
     public static void main(String[] args) throws StackException {
-        DynamicCustomStack<Integer> stack = new DynamicCustomStack<>(Integer.class);
-        for (int i = 0; i < 20; i++) {
-            System.out.println(stack.push(i));
+        CustomQueue<Integer> queue = new CustomQueue<>(Integer.class);
+        queue.add(0);
+        queue.add(1);
+        queue.add(2);
+        queue.add(3);
+        queue.add(4);
+        queue.add(5);
+        queue.add(6);
+        queue.add(7);
+        queue.add(8);
+        queue.add(9);
+        System.out.println(queue);
+        System.out.println(queue.size());
+        int size = queue.size();
+        for (int i = 0; i < size; i++) {
+            System.out.println(queue.remove());
         }
-        System.out.println(lint("({[]})"));
+        System.out.println(queue);
+        System.out.println(queue.peek());
     }
 
     static String primeTime(int num) {
@@ -958,14 +972,14 @@ public class Practice {
         // Write your code here.
         int firstSum = 0, secondSum = 0, base = 1;
         while (linkedListOne != null) {
-            firstSum += linkedListOne.value * base;
+            firstSum += linkedListOne.val * base;
             base *= 10;
             linkedListOne = linkedListOne.next;
         }
 
         base = 1;
         while (linkedListTwo != null) {
-            secondSum += linkedListTwo.value * base;
+            secondSum += linkedListTwo.val * base;
             base *= 10;
             linkedListTwo = linkedListTwo.next;
         }
@@ -997,6 +1011,73 @@ public class Practice {
             }
         }
         return 0;
+    }
+
+    /* AlgoExpert: Next greater element, LeetCode: 503. Next Greater Element II */
+    public static int[] nextGreaterElemenII(int[] array) {
+        // Write your code here.
+        // Brute Force: Overall Time Complexity O(n^2)
+        // Overall Space complexity O(n);
+
+        int[] ans = new int[array.length];
+        int max = Integer.MIN_VALUE;
+
+        for (int i = 0; i < array.length; i++) {
+            ans[i] = array[i];
+            max = Math.max(max, array[i]);
+        }
+
+        for (int i = 0; i < ans.length; i++) {
+            int j = i + 1;
+            // For each element, find the next greater element
+            while (true) {
+                // Since input array is a circular one,
+                // set j to 0 if j >= array.length
+                if (j >= array.length)
+                    j = 0;
+                // Since problem says set element to -1
+                // if there's no such next greater element
+                if (ans[i] == max) {
+                    ans[i] = -1;
+                    break;
+                }
+                // Set next greater element
+                if (array[j] > ans[i]) {
+                    ans[i] = array[j];
+                    break;
+                }
+                j++;
+            }
+        }
+
+        return ans;
+    }
+
+    static int[] nextGreaterElement(int[] nums1, int[] nums2) {
+        /* Brute Force: Time Complexity: O(n ^ 3)
+         * Space Complexity: O(1) */
+        for (int i = 0; i < nums1.length; i++) {
+            int j = 0;
+            while (j < nums2.length) {
+                if (nums2[j] == nums1[i]) {
+                    int k = j + 1;
+                    while (k < nums2.length) {
+                        if (nums2[k] > nums1[i]) {
+                            nums1[i] = nums2[k];
+                            break;
+                        }
+                        k++;
+                        if (k >= nums2.length)
+                            nums1[i] = -1;
+                    }
+                    break;
+                }
+                j++;
+                if (j >= nums2.length)
+                    nums1[i] = -1;
+            }
+        }
+        return nums1;
     }
 
     public void reverseString(char[] s) {

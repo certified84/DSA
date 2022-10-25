@@ -1,5 +1,5 @@
 public class ListNode {
-    int value;
+    int val;
     ListNode next;
 
     ListNode() {
@@ -7,11 +7,11 @@ public class ListNode {
     }
 
     ListNode(int val) {
-        this.value = val;
+        this.val = val;
     }
 
     ListNode(int val, ListNode next) {
-        this.value = val;
+        this.val = val;
         this.next = next;
     }
 
@@ -20,7 +20,7 @@ public class ListNode {
         StringBuilder sb = new StringBuilder();
         ListNode node = this;
         while (node != null) {
-            sb.append(node.value).append("->");
+            sb.append(node.val).append("->");
             node = node.next;
         }
         return sb.toString();

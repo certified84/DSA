@@ -6,11 +6,9 @@ import java.util.stream.IntStream;
 public class LeetCode {
 
     public static void main(String[] args) {
-        ListNode list1 = new ListNode(1, new ListNode(2, new ListNode(4)));
+        ListNode list1 = new ListNode(1, new ListNode(1, new ListNode(1)));
         ListNode list2 = new ListNode(1, new ListNode(3, new ListNode(4)));
-        list1.next = list2;
-        list2.next = list1;
-        System.out.println(hasCycle(list1));
+        System.out.println(getDecimalValue(list1));
     }
 
     static void swap(int[] arr, int i, int j) {
@@ -2052,7 +2050,7 @@ public class LeetCode {
         ListNode head = new ListNode();
         ListNode tail = head;
         while (list1 != null && list2 != null) {
-            if (list1.value < list2.value) {
+            if (list1.val < list2.val) {
                 tail.next = list1;
                 list1 = list1.next;
             } else {
@@ -2072,8 +2070,8 @@ public class LeetCode {
         ListNode tail = head;
         int carry = 0;
         while (l1 != null || l2 != null) {
-            int firstSum = l1 == null ? 0 : l1.value;
-            int secondSum = l2 == null ? 0 : l2.value;
+            int firstSum = l1 == null ? 0 : l1.val;
+            int secondSum = l2 == null ? 0 : l2.val;
             int sum = firstSum + secondSum + carry;
             tail.next = new ListNode(sum % 10);
             carry = sum / 10;
@@ -2169,5 +2167,68 @@ public class LeetCode {
             }
         }
         return null;
+    }
+
+    static int[] nextGreaterElement(int[] nums1, int[] nums2) {
+        /* Brute Force: Time Complexity: O(n ^ 3)
+         * Space Complexity: O(1) */
+//        for (int i = 0; i < nums1.length; i++) {
+//            int j = 0;
+//            while (j < nums2.length) {
+//                if (nums2[j] == nums1[i]) {
+//                    int k = j + 1;
+//                    while (k < nums2.length) {
+//                        if (nums2[k] > nums1[i]) {
+//                            nums1[i] = nums2[k];
+//                            break;
+//                        }
+//                        k++;
+//                        if (k >= nums2.length)
+//                            nums1[i] = -1;
+//                    }
+//                    break;
+//                }
+//                j++;
+//                if (j >= nums2.length)
+//                    nums1[i] = -1;
+//            }
+//        }
+
+//        Key: element, Value: next greatest element
+        Map<Integer, Integer> map = new HashMap<>();
+        Stack<Integer> stack = new Stack<>();
+//        Find the next greatest element for each element
+        for (int num : nums2) {
+            if (!stack.isEmpty() && stack.peek() < num) {
+                map.put(stack.pop(), num);
+            }
+            stack.push(num);
+        }
+        for (int i = 0; i < nums1.length; i++) {
+            nums1[i] = map.getOrDefault(nums1[i], -1);
+        }
+        return nums1;
+    }
+
+    /* LeetCode: 1290. Convert Binary Number in a Linked List to Integer */
+    static int getDecimalValue(ListNode head) {
+        int num = 0;
+
+        while (head != null) {
+            num *= 2;
+            num += head.val;
+            head = head.next;
+        }
+//        int base = 0;
+//        StringBuilder builder = new StringBuilder();
+//        while (head != null) {
+//            builder.append(head.val);
+//            head = head.next;
+//        }
+//        for (int i = builder.length() - 1; i >= 0; i--) {
+//            num += Integer.parseInt(builder.charAt(i) + "") * Math.pow(2, base);
+//            base++;
+//        }
+        return num;
     }
 }

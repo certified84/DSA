@@ -2,7 +2,7 @@ import exceptions.StackException;
 
 import java.lang.reflect.Array;
 
-public class DynamicCustomStack<T> extends CustomStack<T>{
+public class DynamicCustomStack<T> extends CustomStack<T> {
 
     private Class<T> tClass;
 

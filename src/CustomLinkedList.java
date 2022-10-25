@@ -93,9 +93,15 @@ public class CustomLinkedList<T> {
         size++;
     }
 
-    private void insertTail(T value) {
+    protected void insertTail(T value) {
         Node<T> node = new Node<>();
         node.value = value;
+        if (tail == null) {
+            head = node;
+            tail = node;
+            size++;
+            return;
+        }
         tail.next = node;
         tail = node;
         size++;
@@ -123,11 +129,13 @@ public class CustomLinkedList<T> {
         delete(size - 1);
     }
 
-    private void deleteHead() {
+    protected T deleteHead() {
+        T prev = head.value;
         head = head.next;
         if (head == null)
             tail = null;
         size--;
+        return prev;
     }
 
     public Node<T> find(T value) {
@@ -170,37 +178,10 @@ public class CustomLinkedList<T> {
         StringBuilder builder = new StringBuilder();
         Node<T> temp = head;
         while (temp != null) {
-            builder.append(temp.value).append(" -> ");
+            builder.append(((Node<T>) temp).value).append(" -> ");
             temp = temp.next;
         }
         builder.append("END");
         return builder.toString();
-    }
-
-    private class Node<E> {
-        private E value;
-        private Node<E> next;
-
-        public Node() {
-
-        }
-
-        public Node(E value) {
-            this.value = value;
-        }
-
-        public Node(E value, Node<E> next) {
-            this.value = value;
-            this.next = next;
-        }
-
-        @Override
-        public String toString() {
-            String next;
-            if (this.next == null)
-                next = null;
-            else next = String.valueOf(this.next.value);
-            return "Value: " + value + " Next: " + next;
-        }
     }
 }
