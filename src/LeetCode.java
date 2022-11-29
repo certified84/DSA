@@ -1334,26 +1334,6 @@ public class LeetCode {
         return count == nums.length / 2;
     }
 
-    /* LeetCode: 217. Contains Duplicate */
-    public boolean containsDuplicate(int[] nums) {
-//         Using HashMap
-        Map<Integer, Integer> map = new HashMap<>();
-        for (int i = 0; i < nums.length; i++) {
-            if (map.containsKey(nums[i]))
-                return true;
-            map.put(nums[i], i);
-        }
-        // return false;
-
-//         Using HashSet
-        Set<Integer> set = new HashSet<>();
-        for (int num : nums) {
-            if (!set.add(num))
-                return true;
-        }
-        return false;
-    }
-
     /* LeetCode: 242. Valid Anagram */
     static boolean isAnagram(String s, String t) {
 
@@ -1433,7 +1413,6 @@ public class LeetCode {
         }
         return image;
     }
-
 
     /* LeetCode: 15. 3Sum */
     static List<List<Integer>> threeSum(int[] nums) {
@@ -1934,7 +1913,7 @@ public class LeetCode {
 //                return false;
 //            n /= 10;
 //        }
-        // TODO: 11/10/2022  
+        // TODO: 11/10/2022
         return true;
     }
 
@@ -2063,8 +2042,6 @@ public class LeetCode {
         return head.next;
     }
 
-    /* LeetCode: 2. Add Two Numbers */
-
     static ListNode addTwoNumbers(ListNode l1, ListNode l2) {
         ListNode head = new ListNode();
         ListNode tail = head;
@@ -2087,6 +2064,8 @@ public class LeetCode {
         return head.next;
     }
 
+    /* LeetCode: 2. Add Two Numbers */
+
     /* LeetCode: 141. Linked List Cycle */
     static boolean hasCycle(ListNode head) {
         /* Brute force: O(n) time and space complexity using
@@ -2108,13 +2087,13 @@ public class LeetCode {
 //        return false;
 
         /* A more optimized way to detect a cycle in a LinkedList is by
-        * using Floyd's Cycle Detection Algorithm also called Tortoise and
-        * Hare with O(n) time complexity and O(1) space complexity.
-        * This algorithm makes use of a slow (tortoise) and fast (hare)
-        * pointer. With every iteration, we move the slow pointer once and
-        * the fast pointer twice. If there is a cycle, both pointers will
-        * point to the same node at some point. And if there isn't, the fast
-        * pointer will eventually be null.*/
+         * using Floyd's Cycle Detection Algorithm also called Tortoise and
+         * Hare with O(n) time complexity and O(1) space complexity.
+         * This algorithm makes use of a slow (tortoise) and fast (hare)
+         * pointer. With every iteration, we move the slow pointer once and
+         * the fast pointer twice. If there is a cycle, both pointers will
+         * point to the same node at some point. And if there isn't, the fast
+         * pointer will eventually be null.*/
         ListNode slow = head, fast = head;
         while (fast != null && fast.next != null) {
             slow = slow.next;
@@ -2146,13 +2125,13 @@ public class LeetCode {
 //        return null;
 
         /* Like the hasCycle problem, we can also optimize the solution
-        * using Floyd's detection algorithm. We all ready know how to
-        * detect a cycle using the slow and fast pointer. After detecting
-        * the cycle, the next step is to find the entry point of the cycle.
-        * To do this, we set either the slow or fast pointer to the head
-        * leaving the other at the meeting point then move both pointers
-        * once per iteration. The node at with both pointers meet is the
-        * entry point of the cycle.*/
+         * using Floyd's detection algorithm. We all ready know how to
+         * detect a cycle using the slow and fast pointer. After detecting
+         * the cycle, the next step is to find the entry point of the cycle.
+         * To do this, we set either the slow or fast pointer to the head
+         * leaving the other at the meeting point then move both pointers
+         * once per iteration. The node at with both pointers meet is the
+         * entry point of the cycle.*/
         ListNode slow = head, fast = head;
         while (fast != null && fast.next != null) {
             slow = slow.next;
@@ -2230,5 +2209,72 @@ public class LeetCode {
 //            base++;
 //        }
         return num;
+    }
+
+    /* LeetCode: 26. Remove Duplicates from Sorted Array */
+    static int removeDuplicates(int[] nums) {
+
+        if (nums.length <= 1)
+            return nums.length;
+
+//        int left = 1;
+//        for (int right = 1; right < nums.length; right++) {
+//            if (nums[right] != nums[right - 1]) {
+//                nums[left++] = nums[right];
+//            }
+//        }
+
+        int left = 0, right = 1;
+        while (left != right && right != nums.length) {
+            if (nums[left] == nums[right]) {
+                right++;
+                continue;
+            }
+            nums[++left] = nums[right++];
+        }
+        return left + 1;
+    }
+
+    /* LeetCode: 217. Contains Duplicate */
+    public boolean containsDuplicate(int[] nums) {
+//         Using HashMap
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int i = 0; i < nums.length; i++) {
+            if (map.containsKey(nums[i]))
+                return true;
+            map.put(nums[i], i);
+        }
+        // return false;
+
+//         Using HashSet
+        Set<Integer> set = new HashSet<>();
+        for (int num : nums) {
+            if (!set.add(num))
+                return true;
+        }
+        return false;
+    }
+
+    /* LeetCode: 49. Group Anagrams */
+    public static List<List<String>> groupAnagrams(String[] strs) {
+        /* *The idea behind this solution is to use a HashMap with a String as.
+        * key and list as value. All you have to do is sort the characters of a
+        * given string, add it the HashMap keys if it doesn't already exist.
+        * Add the string to the values of the current key. Do this for all
+        * elements in the input array.*/
+        if (strs.length == 0) return new ArrayList<>();
+        Map<String, List> ans = new HashMap<>();
+        for (String str : strs) {
+            char[] ch = str.toCharArray();
+            Arrays.sort(ch);
+            String key = String.valueOf(ch);
+            if (!ans.containsKey(key)) ans.put(key, new ArrayList<>());
+            ans.get(key).add(str);
+        }
+        List<List<String>> list = new ArrayList<>();
+        for (String key : ans.keySet()) {
+            list.add(ans.get(key));
+        }
+        return list;
     }
 }

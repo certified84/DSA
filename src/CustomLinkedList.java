@@ -1,5 +1,3 @@
-import java.io.NotActiveException;
-
 public class CustomLinkedList<T> {
 
     private Node<T> head;

@@ -1,11 +1,9 @@
 import java.lang.reflect.Array;
-import java.util.Arrays;
 
 public class CustomQueue<T> {
 
     private static final int DEFAULT_SIZE = 11;
     private int end = 0;
-    private final int start = 0;
     T[] queue;
 
     public CustomQueue(Class<T> tClass) {
@@ -28,7 +26,7 @@ public class CustomQueue<T> {
             System.out.println("You can't remove from an empty queue");
             return null;
         }
-        T value = queue[start];
+        T value = queue[0];
         for (int i = 0; i < end; i++) {
             queue[i] = queue[i + 1];
         }
@@ -37,7 +35,7 @@ public class CustomQueue<T> {
     }
 
     public T peek() {
-        return queue[start];
+        return queue[0];
     }
 
     public boolean isEmpty() {
@@ -54,6 +52,11 @@ public class CustomQueue<T> {
 
     @Override
     public String toString() {
-        return Arrays.toString(queue);
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < end; i++) {
+            builder.append(queue[i]).append(" <- ");
+        }
+        builder.append("END");
+        return builder.toString();
     }
 }

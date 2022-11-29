@@ -4,25 +4,208 @@ import java.util.*;
 
 public class Practice {
     public static void main(String[] args) throws StackException {
-        CustomQueue<Integer> queue = new CustomQueue<>(Integer.class);
-        queue.add(0);
-        queue.add(1);
-        queue.add(2);
-        queue.add(3);
-        queue.add(4);
-        queue.add(5);
-        queue.add(6);
-        queue.add(7);
-        queue.add(8);
-        queue.add(9);
-        System.out.println(queue);
-        System.out.println(queue.size());
-        int size = queue.size();
-        for (int i = 0; i < size; i++) {
-            System.out.println(queue.remove());
+//        List<String> list = possibleStrings("0100110");
+    }
+    public int[] topKFrequent(int[] nums, int k) {
+
+        List<Integer> list = new ArrayList<>();
+        Map<Integer, Integer> map = new HashMap<>();
+
+        for (int num : nums) {
+            map.put(num, map.getOrDefault(num, 0) + 1);
         }
-        System.out.println(queue);
-        System.out.println(queue.peek());
+
+        for (int key : map.keySet()) {
+            if (map.get(key) >= k) {
+                list.add(key);
+            }
+        }
+
+        int[] ans = new int[list.size()];
+        for (int i = 0; i < list.size(); i++) {
+            ans[i] = list.get(i);
+        }
+
+        return ans;
+    }
+
+    static int palindromic(String s) {
+        long count = 0L;
+        List<String> subsequences = possibleStrings(s);
+        for (String subsequence : subsequences) {
+            if (isPalindrome(subsequence))
+                count++;
+        }
+        return (int) (count % (Math.pow(10, 9) + 7));
+    }
+
+    static List<String> possibleStrings(String s) {
+        int n = s.length();
+        List<String> subsequences = new ArrayList<>();
+        for (int num = 0; num < (1 << n); num++) {
+            StringBuilder subsequence = new StringBuilder();
+            for (int i = 0; i < n; i++) {
+                //check if the ith bit is set or not
+                if ((num & (1 << i)) != 0) {
+                    subsequence.append(s.charAt(i));
+                }
+            }
+            if (subsequence.length() == 5) {
+                subsequences.add(subsequence.toString());
+            }
+        }
+        return subsequences;
+    }
+
+    static boolean isPalindrome(String s) {
+        int left = 0, right = s.length() - 1;
+        while (left != right) {
+            if (s.charAt(left) != s.charAt(right))
+                return false;
+            left++;
+            right--;
+        }
+        return true;
+    }
+
+    static ListNode condence(ListNode head) {
+        Set<Integer> set = new HashSet<>();
+        ListNode tail = head;
+        ListNode prev = head;
+        while (tail != null) {
+            if (!set.add(tail.val)) {
+                prev.next = tail.next;
+//                prev = prev.next;
+                tail = prev.next;
+                continue;
+            }
+            prev = tail;
+            tail = tail.next;
+        }
+        prev.next = tail;
+        return head;
+    }
+
+    static int buildRect(int[] arr) {
+
+        Map<Integer, Integer> map = new HashMap<>();
+
+        for (int num : arr) {
+            map.put(num, map.getOrDefault(num, 0) + 1);
+        }
+
+        int min = Integer.MAX_VALUE;
+        for (int key : map.keySet()) {
+            // value represents the number of times the number appears
+            int value = map.get(key);
+            if (value <= 1)
+                continue;
+            for (int key1 : map.keySet()) {
+                int value1 = map.get(key1);
+                if (value1 <= 1 || key == key1)
+                    continue;
+                int diff = key - key1;
+                min = Math.min(min, Math.abs(diff));
+            }
+        }
+
+        return min == Integer.MAX_VALUE ? 0 : min;
+    }
+
+    static int checkLetters(String s) {
+
+        if (s.length() < 3)
+            return 3 - s.length();
+
+        StringBuilder builder = new StringBuilder();
+
+        Map<Character, Character> map = new HashMap<>();
+        map.put('a', 'b');
+        map.put('b', 'c');
+        map.put('c', 'a');
+
+        Stack<Character> stack = new Stack<>();
+        int i = 0;
+        int count = 0;
+        while (i < s.length()) {
+
+            char current = s.charAt(i);
+
+            if (stack.isEmpty()) {
+                builder.append(current);
+                stack.push(current);
+                i++;
+                continue;
+            }
+
+            char previous = stack.peek();
+            char expected = map.get(previous);
+
+            if (current != expected) {
+                count++;
+                builder.append(expected);
+                stack.push(expected);
+                continue;
+            }
+
+            builder.append(current);
+            stack.push(current);
+            i++;
+        }
+        System.out.println(builder);
+
+        if (builder.charAt(0) != 'a') {
+            count += builder.charAt(0) - 'a';
+        }
+
+//        if (builder.charAt(builder.length() - 1) != 'c') {
+//            count += 'c' - builder.charAt(0);
+//        }
+
+        return count >= 0 ? count : -1;
+    }
+
+    static int solution(int[] array) {
+        // Your solution goes here.
+        int sum = 0;
+        for (int num : array) {
+            sum += num;
+        }
+        int first = sum / 2;
+        int second = sum - first;
+        return Math.abs(first - second);
+    }
+
+    static int findRows(int[] array) {
+        int count = 0;
+        Stack<Integer> stack = new Stack<>();
+        for (int num : array) {
+            if (stack.isEmpty()) {
+                stack.push(num);
+                count++;
+                continue;
+            }
+
+            if (num > stack.peek()) {
+                count++;
+            }
+            stack.push(num);
+        }
+        return count;
+    }
+
+    static int firstUniqChar(String s) {
+        Map<Character, Integer> map = new HashMap<>();
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            map.put(c, map.getOrDefault(c, 0) + 1);
+        }
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            if (map.get(c) == 1)
+                return i;
+        }
+        return -1;
     }
 
     static String primeTime(int num) {
