@@ -4,7 +4,40 @@ import java.util.*;
 
 public class Practice {
     public static void main(String[] args) throws StackException {
-//        List<String> list = possibleStrings("0100110");
+        CustomMaxHeap heap = new CustomMaxHeap();
+        heap.insert(50);
+        heap.insert(20);
+        heap.insert(30);
+        heap.insert(10);
+        heap.insert(15);
+        heap.insert(16);
+        heap.insert(8);
+        heap.getSort();
+        System.out.println(heap);
+    }
+
+    public List<Integer> findAnagrams(String s, String p) {
+        List<Integer> ans = new ArrayList<>();
+        int start = 0, end = p.length();
+        while (end <= s.length()) {
+            if (isAnagram(s.substring(start, end), p))
+                ans.add(start);
+            start++;
+            end++;
+        }
+        return ans;
+    }
+
+    private boolean isAnagram(String s, String p) {
+        char[] sArr = s.toCharArray();
+        char[] pArr = p.toCharArray();
+
+        for (int i = 0; i < sArr.length; i++) {
+            if (sArr[i] != pArr[i])
+                return false;
+        }
+
+        return true;
     }
     public int[] topKFrequent(int[] nums, int k) {
 
