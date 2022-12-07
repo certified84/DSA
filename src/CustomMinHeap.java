@@ -1,17 +1,17 @@
 import java.util.Arrays;
 
-public class CustomMaxHeap implements CustomHeap {
+public class CustomMinHeap implements CustomHeap {
 
     //    private final Stack<Integer> stack;
     private int[] heap;
     private int position = 1;
     private int size = 0;
 
-    public CustomMaxHeap() {
+    public CustomMinHeap() {
         this.heap = new int[10];
     }
 
-    public CustomMaxHeap(int[] arr) {
+    public CustomMinHeap(int[] arr) {
         this.heap = new int[arr.length + 1];
         for (int i : arr) insert(i);
     }
@@ -26,7 +26,7 @@ public class CustomMaxHeap implements CustomHeap {
         int parentPos = position / 2;
         int tempPos = position;
         while (parentPos >= 1) {
-            if (heap[parentPos] < heap[tempPos]) {
+            if (heap[parentPos] > heap[tempPos]) {
                 swap(parentPos, tempPos);
                 tempPos = parentPos;
                 parentPos = parentPos / 2;
@@ -48,14 +48,14 @@ public class CustomMaxHeap implements CustomHeap {
         while (right <= position) {
 
             if (right > size) {
-                if (heap[left] > heap[tempPos])
+                if (heap[left] < heap[tempPos])
                     swap(tempPos, left);
                 break;
             }
 
-            if (heap[tempPos] > heap[left] && heap[tempPos] > heap[right])
+            if (heap[tempPos] < heap[left] && heap[tempPos] < heap[right])
                 break;
-            else if (heap[right] > heap[left] && heap[right] > heap[tempPos]) {
+            else if (heap[right] < heap[left] && heap[right] < heap[tempPos]) {
                 swap(tempPos, right);
                 tempPos = right;
             } else {
