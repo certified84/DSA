@@ -1,3 +1,5 @@
+package stackQueue;
+
 import java.lang.reflect.Array;
 
 public class CustomQueue<T> {

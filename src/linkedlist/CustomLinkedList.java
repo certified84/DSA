@@ -1,10 +1,12 @@
-public class CustomCircularLinkedList<T> {
+package linkedlist;
+
+public class CustomLinkedList<T> {
 
     private Node<T> head;
     private Node<T> tail;
     private int size;
 
-    public CustomCircularLinkedList() {
+    public CustomLinkedList() {
         this.size = 0;
     }
 
@@ -18,6 +20,14 @@ public class CustomCircularLinkedList<T> {
 
     public Node<T> tail() {
         return this.tail;
+    }
+
+    public Node<T> getRecurse(int position) {
+        if (position < 0 || position >= size)
+            return null;
+        if (position == 0)
+            return head;
+        return getRecurse(--position).next;
     }
 
     public Node<T> get(int position) {
@@ -38,15 +48,25 @@ public class CustomCircularLinkedList<T> {
         Node<T> node = new Node<>(value);
         if (tail != null) {
             tail.next = node;
-            node.next = head;
             tail = node;
             size++;
             return;
         }
-        tail = node;
-        head = node;
-        head.next = head;
-        size++;
+        insertHead(value);
+    }
+
+    public void insertRecurse(T value, int position) {
+        if (position == 0)
+            insertHead(value);
+        else if (position < 0 || position >= size) {
+            System.out.println("Index is out of bound");
+        } else {
+            Node<T> node = new Node<>(value);
+            Node<T> prev = getRecurse(position - 1);
+            node.next = prev.next;
+            prev.next = node;
+            size++;
+        }
     }
 
     public void insert(T value, int position) {
@@ -73,9 +93,15 @@ public class CustomCircularLinkedList<T> {
         size++;
     }
 
-    private void insertTail(T value) {
+    protected void insertTail(T value) {
         Node<T> node = new Node<>();
         node.value = value;
+        if (tail == null) {
+            head = node;
+            tail = node;
+            size++;
+            return;
+        }
         tail.next = node;
         tail = node;
         size++;
@@ -103,16 +129,18 @@ public class CustomCircularLinkedList<T> {
         delete(size - 1);
     }
 
-    private void deleteHead() {
+    protected T deleteHead() {
+        T prev = head.value;
         head = head.next;
         if (head == null)
             tail = null;
         size--;
+        return prev;
     }
 
     public Node<T> find(T value) {
         Node<T> node = head;
-        while (node != tail) {
+        while (node != null) {
             if (node.value == value)
                 return node;
             node = node.next;
@@ -124,34 +152,36 @@ public class CustomCircularLinkedList<T> {
         return find(value) != null;
     }
 
+    public void reverse() {
+        Node<T> node = tail;
+        int pos = size - 2;
+        while (pos >= 0) {
+            node.next = get(pos);
+            pos--;
+        }
+    }
+
+    public void removeDuplicates() {
+        Node<T> current = head;
+        while (current.next != null) {
+            if (current.value == current.next.value) {
+                current.next = current.next.next;
+                size--;
+                continue;
+            }
+            current = current.next;
+        }
+    }
+
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        Node<T> node = head;
-        if (node != null) {
-            do {
-                builder.append(node.value).append(" -> ");
-                node = node.next;
-            } while (node != head);
+        Node<T> temp = head;
+        while (temp != null) {
+            builder.append(((Node<T>) temp).value).append(" -> ");
+            temp = temp.next;
         }
+        builder.append("END");
         return builder.toString();
-    }
-
-    private class Node<E> {
-        private E value;
-        private Node<E> next;
-
-        public Node() {
-
-        }
-
-        public Node(E value) {
-            this.value = value;
-        }
-
-        public Node(E value, Node<E> next) {
-            this.value = value;
-            this.next = next;
-        }
     }
 }
