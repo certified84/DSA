@@ -1,6 +1,9 @@
+package linkedlist;
+
 public class Node<E> {
-    protected E value;
-    protected Node<E> next;
+
+    public E value;
+    public Node<E> next;
 
     public Node() {
 

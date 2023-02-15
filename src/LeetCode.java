@@ -1,3 +1,5 @@
+import linkedlist.ListNode;
+
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -2077,8 +2079,8 @@ public class LeetCode {
          * the set and returns false if the set already contains
          * the element. We can use this feature to detect a cycle
          * in a LinkedList. */
-//        ListNode temp = head;
-//        Set<ListNode> set = new HashSet<>();
+//        linkedlist.ListNode temp = head;
+//        Set<linkedlist.ListNode> set = new HashSet<>();
 //        while (temp != null) {
 //            if(!set.add(temp))
 //                return true;
@@ -2115,8 +2117,8 @@ public class LeetCode {
          * the set and returns false if the set already contains
          * the element. We can use this feature to find the entry point
          * of the cycle in a LinkedList. */
-//        ListNode temp = head;
-//        Set<ListNode> set = new HashSet<>();
+//        linkedlist.ListNode temp = head;
+//        Set<linkedlist.ListNode> set = new HashSet<>();
 //        while (temp != null) {
 //            if(!set.add(temp))
 //                return temp;
