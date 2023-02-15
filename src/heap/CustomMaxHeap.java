@@ -1,12 +1,9 @@
 package heap;
 
-import heap.CustomHeap;
-
 import java.util.Arrays;
 
 public class CustomMaxHeap implements CustomHeap {
 
-    //    private final Stack<Integer> stack;
     private int[] heap;
     private int position = 1;
     private int size = 0;
@@ -16,8 +13,9 @@ public class CustomMaxHeap implements CustomHeap {
     }
 
     public CustomMaxHeap(int[] arr) {
-        this.heap = new int[arr.length + 1];
-        for (int i : arr) insert(i);
+//        this.heap = new int[arr.length + 1];
+//        for (int i : arr) insert(i);
+        heapify(arr);
     }
 
     @Override
@@ -103,21 +101,20 @@ public class CustomMaxHeap implements CustomHeap {
             size++;
             position++;
         }
-        int currentPos = heap.length - 1, left = currentPos * 2, right = currentPos * 2 + 1;
-        while (currentPos >= 1) {
-
-            if (left > size || (heap[currentPos] > heap[left] && heap[currentPos] > heap[right]))
-                currentPos--;
-            else if (heap[right] > heap[left] && heap[right] > heap[currentPos]) {
-                swap(currentPos, right);
-                currentPos = right;
-            } else {
-                swap(currentPos, left);
-                currentPos = left;
+        for (int i = arr.length; i > 0; i--) {
+            int currentPos = i;
+            while (true) {
+                int left = currentPos * 2, right = currentPos * 2 + 1;
+                if (left > size || right > size || (heap[currentPos] > heap[left] && heap[currentPos] > heap[right]))
+                    break;
+                else if (heap[right] > heap[left] && heap[right] > heap[currentPos]) {
+                    swap(currentPos, right);
+                    currentPos = right;
+                } else {
+                    swap(currentPos, left);
+                    currentPos = left;
+                }
             }
-
-            left = currentPos * 2;
-            right = currentPos * 2 + 1;
         }
     }
 
