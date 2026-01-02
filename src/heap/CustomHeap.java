@@ -4,11 +4,13 @@ public interface CustomHeap {
 
     void insert(int value);
 
-    void delete();
+    int delete();
 
     void getSort();
 
     int[] sort(int[] arr);
 
     void heapify(int[] arr);
+
+    int size();
 }

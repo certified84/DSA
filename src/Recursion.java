@@ -1,12 +1,65 @@
+import java.sql.Array;
+
 public class Recursion {
     public static void main(String[] args) {
-//        System.out.println(fibo(6));
-        int[] arr = {-5, -3, -2, -2, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
-        int target = -4;
-//        for (int i = 0; i <= 10; i++) {
-//            System.out.println("Fibonacci number of " + i + " is " + fibonacciFormula(i));
-//        }
-        System.out.println(fibo(6));
+        int n = 14;
+//        int[] sortedNumbers = {3, 7, 12, 18, 23, 29, 34, 41, 45, 52, 58, 63, 71, 85, 92};
+//        System.out.println(binarySearch(sortedNumbers, 12, 0, sortedNumbers.length -1));
+        nto1(100);
+    }
+
+    static void nto1(int n) {
+        if (n == 1) {
+            System.out.println(1);
+            return;
+        }
+        nto1(n-1);
+        System.out.println(n);
+    }
+
+    static int numberOfSteps(int num) {
+        int count = 0;
+        if (num == 0)
+            return 0;
+        count++;
+        if (num % 2 == 0)
+            return count + numberOfSteps(num / 2);
+        return count + numberOfSteps(num - 1);
+    }
+
+    static int noOfZeros(int n) {
+        int count = 0;
+        if (n == 0)
+            return 0;
+        if (n % 10 == 0)
+            count++;
+        return count + noOfZeros(n / 10);
+    }
+
+    static StringBuilder reverse(int n) {
+        StringBuilder builder = new StringBuilder(String.valueOf(n % 10));
+        if (n < 10)
+            return new StringBuilder(String.valueOf(n));
+        return builder.append(reverse(n / 10));
+    }
+
+    static int reverse(int n, int base) {
+        if (n < 10)
+            return n;
+        return (n % 10) * base + reverse(n / 10, base / 10);
+    }
+
+    static int sumOfDigits(int n) {
+        if (n < 10)
+            return n;
+        return (n % 10) + sumOfDigits(n / 10);
+    }
+
+    static int factorial(int n) {
+        if (n < 10)
+            return n;
+
+        return n * factorial(n - 1);
     }
 
     static void print(int start, int end) {

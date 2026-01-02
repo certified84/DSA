@@ -39,7 +39,7 @@ public class CustomMinHeap implements CustomHeap {
     }
 
     @Override
-    public void delete() {
+    public int delete() {
 
         if (size == 0)
             throw new RuntimeException("Heap is empty");
@@ -57,7 +57,7 @@ public class CustomMinHeap implements CustomHeap {
 
             if (heap[tempPos] < heap[left] && heap[tempPos] < heap[right])
                 break;
-            else if (heap[right] < heap[left] && heap[right] < heap[tempPos]) {
+            else if (heap[right] < heap[left] && heap[right] <= heap[tempPos]) {
                 swap(tempPos, right);
                 tempPos = right;
             } else {
@@ -68,6 +68,7 @@ public class CustomMinHeap implements CustomHeap {
             left = tempPos * 2;
             right = tempPos * 2 + 1;
         }
+        return current;
     }
 
     private void swap(int index1, int index2) {
@@ -121,5 +122,10 @@ public class CustomMinHeap implements CustomHeap {
     @Override
     public String toString() {
         return Arrays.toString(heap);
+    }
+
+    @Override
+    public int size() {
+        return size;
     }
 }

@@ -10,6 +10,7 @@ public class CustomMaxHeap implements CustomHeap {
 
     public CustomMaxHeap() {
         this.heap = new int[10];
+        int[] ans = Arrays.copyOfRange(heap, 1, 10);
     }
 
     public CustomMaxHeap(int[] arr) {
@@ -39,7 +40,7 @@ public class CustomMaxHeap implements CustomHeap {
     }
 
     @Override
-    public void delete() {
+    public int delete() {
 
         if (size == 0)
             throw new RuntimeException("Heap is empty");
@@ -68,6 +69,7 @@ public class CustomMaxHeap implements CustomHeap {
             left = tempPos * 2;
             right = tempPos * 2 + 1;
         }
+        return current;
     }
 
     private void swap(int index1, int index2) {
@@ -107,7 +109,7 @@ public class CustomMaxHeap implements CustomHeap {
                 int left = currentPos * 2, right = currentPos * 2 + 1;
                 if (left > size || right > size || (heap[currentPos] > heap[left] && heap[currentPos] > heap[right]))
                     break;
-                else if (heap[right] > heap[left] && heap[right] > heap[currentPos]) {
+                else if (heap[right] > heap[left] && heap[right] >= heap[currentPos]) {
                     swap(currentPos, right);
                     currentPos = right;
                 } else {
@@ -121,5 +123,10 @@ public class CustomMaxHeap implements CustomHeap {
     @Override
     public String toString() {
         return Arrays.toString(heap);
+    }
+
+    @Override
+    public int size() {
+        return size;
     }
 }
